@@ -1,4 +1,4 @@
-name: tests
+name: tests-auth
 
 # Controls when the workflow will run
 on: 
@@ -21,10 +21,3 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: cd auth && npm install && npm run test:ci
-
-      ## Runs a set of commands using the runners shell
-      # - name: Run 'auth' service multi-line script
-      #  run: |
-      #    cd auth,
-      #    npm install,
-      #    npm run test:ci
