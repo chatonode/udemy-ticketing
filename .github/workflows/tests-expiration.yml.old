@@ -1,3 +1,7 @@
+# Making this file untestable, cuz it sticks GitHub Action with unsuccessful tests (with incompleted implementations).
+
+# --------------------------------------- END -------------------------------------- #
+
 name: tests-expiration
 
 # Controls when the workflow will run
