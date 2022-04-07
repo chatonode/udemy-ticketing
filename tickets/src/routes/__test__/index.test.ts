@@ -31,6 +31,7 @@ it(`can fetch a list of tickets`, async () => {
 
 })
 
+//BLA
 it(`can fetch an empty list of tickets`, async () => {
     const response = await request(app)
         .get('/api/tickets')
