@@ -16,6 +16,16 @@ const createTicket = async (title: string, price: number) => {
         })
 }
 
+it(`can fetch an empty list of tickets`, async () => {
+    const response = await request(app)
+        .get('/api/tickets')
+        .send()
+        .expect(200)
+
+    expect(response.body.length).toEqual(0)
+
+})
+
 it(`can fetch a list of tickets`, async () => {
     // Pre-Condition: Create two Tickets
     await createTicket('Massive Attack Europe Tour', 59.90)
@@ -28,15 +38,5 @@ it(`can fetch a list of tickets`, async () => {
         .expect(200)
 
     expect(response.body.length).toEqual(3)
-
-})
-
-it(`can fetch an empty list of tickets`, async () => {
-    const response = await request(app)
-        .get('/api/tickets')
-        .send()
-        .expect(200)
-
-    expect(response.body.length).toEqual(0)
 
 })
