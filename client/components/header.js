@@ -4,6 +4,7 @@ const Header = ({ currentUser }) => {
 
     // Trick to conditionally show the content based upon single filtering criteria
     const links = [
+        // Logged In
         currentUser && { label: 'Sell a Ticket', href: '/tickets/new' },
         currentUser && { label: 'My Orders', href: '/orders' },
         
