@@ -2,6 +2,8 @@ import { natsWrapper } from './nats-wrapper'
 import { OrderCreatedListener } from './events/listeners/order-created-listener'
 
 const start = async () => {
+    console.log('Starting...')
+    
     // Env: REDIS_HOST exists
     if (!process.env.REDIS_HOST) {
         throw new Error('REDIS_HOST must be defined.')

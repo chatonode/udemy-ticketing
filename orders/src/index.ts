@@ -9,6 +9,8 @@ import { ExpirationCompletedListener } from './events/listeners/expiration-compl
 import { PaymentCreatedListener } from './events/listeners/payment-created-listener'
 
 const start = async () => {
+    console.log('Starting...')
+    
     // Env: JWT_KEY exists (to be able to use 'process.env.JWT_KEY!')
     if (!process.env.JWT_KEY) {
         throw new Error('JWT_KEY must be defined.')

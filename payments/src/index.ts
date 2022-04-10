@@ -9,6 +9,8 @@ import { OrderCancelledListener } from './events/listeners/order-cancelled-liste
 import { OrderCompletedListener } from './events/listeners/order-completed-listener'
 
 const start = async () => {
+    console.log('Starting...')
+    
     // Env: JWT_KEY exists (to be able to use 'process.env.JWT_KEY!')
     if (!process.env.JWT_KEY) {
         throw new Error('JWT_KEY must be defined.')
