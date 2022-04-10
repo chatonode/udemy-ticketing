@@ -28,7 +28,6 @@ jobs:
           cd auth
           docker build -t chatonode/auth .
 
-          
       - name: Log in to Docker
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         # Use GitHub Secret to reach 'username' and 'password'
@@ -38,3 +37,16 @@ jobs:
           
       - name: Push image to Docker Hub
         run: docker push chatonode/auth
+
+      ###### Digital Ocean ######
+      
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          
+      - name: Save DigitalOcean kubeconfig
+        run: doctl kubernetes cluster kubeconfig save ticketing
+        
+      - name: Update the deployment with the latest image pushed to Docker Hub
+        run: kubectl rollout restart deployment auth-depl
