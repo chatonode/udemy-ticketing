@@ -20,10 +20,12 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
 
 AppComponent.getInitialProps = async (appContext) => {
     const client = buildClient(appContext.ctx)
-    // data -> { currentUser: ... }
-    const { data } = await client.get('/api/users/currentuser').catch((error) => {
+    
+    const response = await client.get('/api/users/currentuser').catch((error) => {
         console.log(error.message)
     })
+    // data -> { currentUser: ... }
+    const data = response.data
 
     // Passing props to sub-components (if getInitialProps is defined)
     let pageProps = {}
