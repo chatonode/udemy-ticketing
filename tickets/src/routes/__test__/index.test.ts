@@ -31,6 +31,7 @@ it(`can fetch a list of tickets`, async () => {
 
 })
 
+// If there's a problem at GitHub Action, place it before the previous (fetching 3 tickets) test!
 it(`can fetch an empty list of tickets`, async () => {
     const response = await request(app)
         .get('/api/tickets')
