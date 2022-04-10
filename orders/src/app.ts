@@ -14,7 +14,10 @@ app.set('trust proxy', true)    // Traffic is being proxied by Ingress NGINX
 app.use(express.json())
 app.use(cookieSession({
     signed: false,                              // Disabling 'cookie encryption'
-    secure: process.env.NODE_ENV !== 'test'     // Enabling 'required HTTPS connection' (if NODE_ENV !== 'test') 
+
+    // secure: process.env.NODE_ENV !== 'test'     // Enabling 'required HTTPS connection' (if NODE_ENV !== 'test')
+    // HTTPS switched off for production
+    secure: false
 }))
 
 // After cookieSession middleware:
