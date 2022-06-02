@@ -1,10 +1,10 @@
 import axios from 'axios'
 
 // Local
-// const ingressNginxURL = 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local'
+const ingressNginxURL = 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local'
 
 // Prod
-const ingressNginxURL = 'http://www.zombilet.xyz'
+// const ingressNginxURL = 'http://www.zombilet.xyz'
 
 const buildClient = ({ req }) => {
     // Server || Browser
