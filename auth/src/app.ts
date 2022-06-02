@@ -14,9 +14,11 @@ app.use(express.json())
 app.use(cookieSession({
     signed: false,                              // Disabling 'cookie encryption'
 
-    // secure: process.env.NODE_ENV !== 'test'     // Enabling 'required HTTPS connection' (if NODE_ENV !== 'test')
+    // HTTPS switched on for dev
+    secure: process.env.NODE_ENV !== 'test'     // Enabling 'required HTTPS connection' (if NODE_ENV !== 'test')
+
     // HTTPS switched off for production
-    secure: false
+    // secure: false
 }))
 
 // Route Handler
