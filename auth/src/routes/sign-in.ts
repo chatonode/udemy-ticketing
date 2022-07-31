@@ -7,6 +7,9 @@ import { User } from '../models/user'
 
 import { Password } from '../services/password'
 
+import { natsWrapper } from '../nats-wrapper'
+import { UserSignedInPublisher } from '../events/publishers/user-signed-in-publisher'
+
 const router = express.Router()
 
 router.post(
@@ -34,6 +37,11 @@ router.post(
     if (!passwordsMatch) {
       throw new BadRequestError('Invalid Credentials!')
     }
+
+    // Publish an event saying that a user is signed up
+    await new UserSignedInPublisher(natsWrapper.client).publish({
+      email: existingUser.email
+    })
 
     // Generate a JWT
     const payload = {
