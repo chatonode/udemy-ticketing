@@ -1,6 +1,9 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 
+// Tell Jest to mock that file from '../__mocks__'
+jest.mock('../nats-wrapper')
+
 let mongo: any
 
 beforeAll(async () => {
