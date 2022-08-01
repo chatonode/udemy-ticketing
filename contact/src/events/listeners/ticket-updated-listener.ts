@@ -9,7 +9,7 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     queueGroupName = queueGroupName
 
     async onMessage(data: TicketUpdatedEvent['data'], msg: Message): Promise<void> {
-        const {  } = data
+        const { id: ticketId, title, price, userId, orderId } = data
 
         console.log('TICKET UPDATED: ', data)
 

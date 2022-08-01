@@ -9,7 +9,7 @@ export class OrderCompletedListener extends Listener<OrderCompletedEvent> {
     queueGroupName = queueGroupName
 
     async onMessage(data: OrderCompletedEvent['data'], msg: Message): Promise<void> {
-        const {  } = data
+        const { id: orderId, status } = data
 
         console.log('ORDER COMPLETED: ', data)
 

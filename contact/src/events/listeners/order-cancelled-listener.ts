@@ -9,7 +9,8 @@ export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
     queueGroupName = queueGroupName
     
     async onMessage(data: OrderCancelledEvent['data'], msg: Message): Promise<void> {
-        const {  } = data
+        const { id: orderId, ticket } = data
+        const { id: ticketId } = ticket
 
         console.log('ORDER CANCELLED: ', data)
 

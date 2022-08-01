@@ -9,7 +9,7 @@ export class TicketCreatedListener extends Listener<TicketCreatedEvent> {
     queueGroupName = queueGroupName
 
     async onMessage(data: TicketCreatedEvent['data'], msg: Message): Promise<void> {
-        const {  } = data
+        const { id: ticketId, title, price, userId } = data
 
         console.log('TICKET CREATED: ', data)
 
