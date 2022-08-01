@@ -3,6 +3,11 @@ import { app } from './app'
 import { natsWrapper } from './nats-wrapper'
 import { UserSignedUpListener } from './events/listeners/user-signed-up-listener'
 import { UserSignedInListener } from './events/listeners/user-signed-in-listener'
+import { TicketCreatedListener } from './events/listeners/ticket-created-listener'
+import { TicketUpdatedListener } from './events/listeners/ticket-updated-listener'
+import { OrderCreatedListener } from './events/listeners/order-created-listener'
+import { OrderCancelledListener } from './events/listeners/order-cancelled-listener'
+import { OrderCompletedListener } from './events/listeners/order-completed-listener'
 
 const start = async () => {
     console.log('Starting...')
@@ -46,6 +51,11 @@ const start = async () => {
         // Listener Initialization
         new UserSignedUpListener(natsWrapper.client).listen()
         new UserSignedInListener(natsWrapper.client).listen()
+        new TicketCreatedListener(natsWrapper.client).listen()
+        new TicketUpdatedListener(natsWrapper.client).listen()
+        new OrderCreatedListener(natsWrapper.client).listen()
+        new OrderCancelledListener(natsWrapper.client).listen()
+        new OrderCompletedListener(natsWrapper.client).listen()
         
     } catch (err) {
         console.error(err)
