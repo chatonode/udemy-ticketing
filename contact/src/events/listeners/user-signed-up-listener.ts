@@ -13,6 +13,8 @@ export class UserSignedUpListener extends Listener<UserSignedUpEvent> {
 
         console.log('Sign Up > I AM GOING TO USE THAT E-MAIL AS: ' + email)
 
+        
+
         msg.ack()
     }
 }

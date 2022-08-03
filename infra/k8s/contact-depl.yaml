@@ -30,6 +30,17 @@ spec:
                   fieldPath: metadata.name  # Pod Name
             - name: NATS_URL
               value: 'http://nats-streaming-srv:4222'
+            # Sendgrid
+            - name: SENDGRID_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secret
+                  key: SENDGRID_KEY
+            - name: SENDGRID_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-email
+                  key: SENDGRID_EMAIL
 
 ---
 apiVersion: v1
