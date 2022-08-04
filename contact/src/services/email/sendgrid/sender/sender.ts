@@ -1,16 +1,6 @@
 import sgMail from '@sendgrid/mail'
 
-import { TempSubjects } from '../subjects'
-
-export interface EmailData {
-    title: string,
-    body: string,
-}
-
-interface BaseTemp {
-    tempSubject: TempSubjects
-    data: EmailData
-}
+import { BaseSender } from '../../base/base-sender'
 
 interface SGEmailTemp {
     to: string,
@@ -19,8 +9,8 @@ interface SGEmailTemp {
     text: string,
 }
 
-export abstract class Temp<T extends BaseTemp> {
-    protected abstract tempSubject: T['tempSubject']
+export abstract class Sender<T extends BaseSender> {
+    protected abstract sendingReason: T['sendingReason']
 
     constructor(private email: string, protected data: T['data']) {
         this.sendEmail(data)

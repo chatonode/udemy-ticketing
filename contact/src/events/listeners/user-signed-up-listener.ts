@@ -5,7 +5,7 @@ import { Listener, Subjects, UserSignedUpEvent } from '@chato-zombilet/common'
 import { queueGroupName } from './queue-group-name'
 
 // Template
-import { SendEmailForUserSignedUp } from '../../services/sendgrid/templates/user-signed-up'
+import { SendEmailForUserSignedUp } from '../../services/email/sendgrid/sender/user-signed-up'
 
 // import sgMail from '@sendgrid/mail'
 

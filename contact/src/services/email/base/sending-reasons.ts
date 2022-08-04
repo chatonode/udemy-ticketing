@@ -1,4 +1,4 @@
-export enum TempSubjects {
+export enum SendingReasons {
     UserSignedUp = 'user:signed-up',
     UserSignedIn = 'user:signed-in',
 
