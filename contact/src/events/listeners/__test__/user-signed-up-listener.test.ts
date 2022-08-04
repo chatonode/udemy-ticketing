@@ -15,9 +15,8 @@ const setup = async () => {
     const listener = new UserSignedUpListener(natsWrapper.client)
 
     // create a fake data event
-
     const data: UserSignedUpEvent['data'] = {
-        email: 'cemalsahabettin@gmail.com'
+        email: 'chatonode@gmail.com'
     }
 
     // create a fake message object
@@ -43,7 +42,7 @@ it('receives the data', async () => {
     // Assert: Make sure ...
 
     // Placeholder assertion (only for init)
-    expect(data.email).toEqual('cemalsahabettin@gmail.com')
+    expect(data.email).toEqual('chatonode@gmail.com')
 })
 
 it('acks the message', async () => {

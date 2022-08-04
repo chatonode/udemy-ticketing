@@ -68,9 +68,6 @@ const start = async () => {
         new OrderCompletedListener(natsWrapper.client).listen()
         
         // Sendgrid
-        // Raw API Key is going to be hidden later, by:
-        // // -> creating a Secret
-        // // -> creating an environment variable
         sgMail.setApiKey(process.env.SENDGRID_KEY)
 
     } catch (err) {
