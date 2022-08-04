@@ -4,6 +4,11 @@ import { Listener, Subjects, UserSignedUpEvent } from '@chato-zombilet/common'
 
 import { queueGroupName } from './queue-group-name'
 
+// Template
+import { SendEmailForUserSignedUp } from '../../services/sendgrid/templates/user-signed-up'
+
+// import sgMail from '@sendgrid/mail'
+
 export class UserSignedUpListener extends Listener<UserSignedUpEvent> {
     readonly subject = Subjects.UserSignedUp
     queueGroupName = queueGroupName
@@ -13,7 +18,16 @@ export class UserSignedUpListener extends Listener<UserSignedUpEvent> {
 
         console.log('Sign Up > I AM GOING TO USE THAT E-MAIL AS: ' + email)
 
-        
+        new SendEmailForUserSignedUp(email)
+
+        // const message = {
+        //     to: email,
+        //     from: process.env.SENDGRID_EMAIL!,
+        //     subject: 'ASDDDASDSADTITLE WELCOME',
+        //     text: 'YOU LL LIKE THAT BODY',
+        // }
+        // sgMail.send(message)
+
 
         msg.ack()
     }

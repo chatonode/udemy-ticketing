@@ -31,7 +31,7 @@ const start = async () => {
     }
 
     /* Envs: SENDGRID_KEY, SENGRID_EMAIL exists */
-    if (!process.env.SENGRID_KEY) {
+    if (!process.env.SENDGRID_KEY) {
         throw new Error('SENDGRID_KEY must be defined.')
     }
     if (!process.env.SENDGRID_EMAIL) {
@@ -71,7 +71,7 @@ const start = async () => {
         // Raw API Key is going to be hidden later, by:
         // // -> creating a Secret
         // // -> creating an environment variable
-        sgMail.setApiKey(process.env.SENGRID_KEY)
+        sgMail.setApiKey(process.env.SENDGRID_KEY)
 
     } catch (err) {
         console.error(err)
