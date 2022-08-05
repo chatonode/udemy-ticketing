@@ -1,8 +1,7 @@
 import { SendingReasons } from '../../base/sending-reasons'
 
-import { UserSignedUpInt } from '../interface/user-signed-up-int'
-
 import { Sender } from './sender'
+import { UserSignedUpInt } from '../interface/user-signed-up-int'
 
 const titleWelcome = 'Welcome to Zombilet!'
 const bodyWelcome = `We are going to love each other more starting from this day!`
