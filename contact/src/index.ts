@@ -30,7 +30,7 @@ const start = async () => {
         throw new Error('NATS_URL must be defined.')
     }
 
-    /* Envs: SENDGRID_KEY, SENGRID_EMAIL exists */
+    /* Envs: SENDGRID_KEY, SENDGRID_EMAIL exists */
     if (!process.env.SENDGRID_KEY) {
         throw new Error('SENDGRID_KEY must be defined.')
     }
