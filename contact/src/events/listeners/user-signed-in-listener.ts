@@ -4,6 +4,9 @@ import { Listener, Subjects, UserSignedInEvent } from '@chato-zombilet/common'
 
 import { queueGroupName } from './queue-group-name'
 
+// Sender
+import { SendEmailForUserSignedIn } from '../../services/email/sendgrid/sender/user-signed-in'
+
 export class UserSignedInListener extends Listener<UserSignedInEvent> {
     readonly subject = Subjects.UserSignedIn
     queueGroupName = queueGroupName
@@ -11,7 +14,7 @@ export class UserSignedInListener extends Listener<UserSignedInEvent> {
     async onMessage(data: UserSignedInEvent['data'], msg: Message): Promise<void> {
         const { email } = data
 
-        console.log('Sign In > I AM GOING TO USE THAT E-MAIL AS: ' + email)
+        new SendEmailForUserSignedIn(email)
 
         msg.ack()
     }
