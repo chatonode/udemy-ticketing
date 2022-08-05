@@ -35,7 +35,7 @@ const start = async () => {
         throw new Error('SENDGRID_KEY must be defined.')
     }
     if (!process.env.SENDGRID_EMAIL) {
-        throw new Error('SENGRID_EMAIL must be defined.')
+        throw new Error('SENDGRID_EMAIL must be defined.')
     }
 
     try {

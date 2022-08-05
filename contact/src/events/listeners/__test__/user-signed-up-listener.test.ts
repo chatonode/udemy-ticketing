@@ -16,7 +16,7 @@ const setup = async () => {
 
     // create a fake data event
     const data: UserSignedUpEvent['data'] = {
-        email: 'chatonode@gmail.com'
+        email: 'testmail@testmail.com'
     }
 
     // create a fake message object
@@ -39,10 +39,8 @@ it('receives the data', async () => {
     // call the onMessage function with the data object + message object
     await listener.onMessage(data, msg)
 
-    // Assert: Make sure ...
-
     // Placeholder assertion (only for init)
-    expect(data.email).toEqual('chatonode@gmail.com')
+    expect(data.email).toEqual('testmail@testmail.com')
 })
 
 it('acks the message', async () => {

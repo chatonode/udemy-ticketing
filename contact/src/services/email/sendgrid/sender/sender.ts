@@ -1,16 +1,8 @@
-import sgMail from '@sendgrid/mail'
+import sgMail, { MailDataRequired } from '@sendgrid/mail'
 
 import { ForbiddenError } from '@chato-zombilet/common'
 
 import { BaseSender } from '../../base/base-sender'
-
-
-interface SGEmailTemp {
-    to: string,
-    from: string,
-    subject: string,
-    text: string,
-}
 
 export abstract class Sender<T extends BaseSender> {
     protected abstract sendingReason: T['sendingReason']
@@ -19,10 +11,10 @@ export abstract class Sender<T extends BaseSender> {
         this.sendEmail(data)
     }
 
-    async sendEmail(data: T['data']): Promise<void> {
+    sendEmail(data: T['data']): void {
         const { title, body } = data
 
-        const msg: SGEmailTemp = {
+        const msg: MailDataRequired = {
             to: this.email,
             from: process.env.SENDGRID_EMAIL!,
             subject: title,
@@ -30,7 +22,7 @@ export abstract class Sender<T extends BaseSender> {
         }
 
         try {
-            await sgMail.send(msg)
+            sgMail.send(msg)
         } catch (error) {
             console.error(error)
             console.error((error as any).response)
