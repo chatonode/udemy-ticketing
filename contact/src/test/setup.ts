@@ -8,6 +8,7 @@ jest.mock('@sendgrid/mail')
 beforeAll(async () => {
     process.env.JWT_KEY = 'asdfasdf'
 
+    // For asserting 'from' value of an object, that is sent through 'sgMail.send()' calls
     process.env.SENDGRID_EMAIL = 'somevalidtestemail@sendgrid.com'
 
 })

@@ -3,7 +3,7 @@ import sgMail from '@sendgrid/mail'
 
 import { SendEmailForUserSignedUp } from '../user-signed-up'
 
-it('sends email', () => {
+it('sends sign-up email', () => {
     new SendEmailForUserSignedUp('newuser@zombilet.com')
 
     expect(sgMail.send).toHaveBeenCalled()

@@ -1,8 +1,7 @@
 import { SendingReasons } from '../../base/sending-reasons'
 
-import { UserSignedInInt } from '../interface/user-signed-in-int'
-
 import { Sender } from './sender'
+import { UserSignedInInt } from '../interface/user-signed-in-int'
 
 const titleSignIn = 'Sign In Activity | Zombilet!'
 const bodySignIn = `
