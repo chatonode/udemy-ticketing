@@ -5,17 +5,19 @@ import { ForbiddenError } from '@chato-zombilet/common'
 import { BaseSender } from '../../base/base-sender'
 
 export abstract class Sender<T extends BaseSender> {
+
     protected abstract sendingReason: T['sendingReason']
+    protected abstract data: T['data']
+    
+    // protected eventData?: T['eventData']
 
-    constructor(private email: string, protected data: T['data']) {
-        this.sendEmail(data)
-    }
+    protected abstract getData: (eventData: T['eventData']) => T['data']
 
-    sendEmail(data: T['data']): void {
-        const { title, body } = data
+    protected sendEmailTo(email: string): void {
+        const { title, body } = this.data
 
         const msg: MailDataRequired = {
-            to: this.email,
+            to: email,
             from: process.env.SENDGRID_EMAIL!,
             subject: title,
             text: body,
@@ -29,6 +31,10 @@ export abstract class Sender<T extends BaseSender> {
 
             throw new ForbiddenError()
         }
+    }
+
+    constructor() {
+        
     }
 }
 

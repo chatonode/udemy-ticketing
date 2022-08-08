@@ -1,21 +1,34 @@
-import { SendingReasons } from '../../base/sending-reasons'
+import { SendingReasons } from '../../base/base-sender'
 
 import { Sender } from './sender'
 import { UserSignedUpInt } from '../interface/user-signed-up-int'
 
-const titleWelcome = 'Welcome to Zombilet!'
-const bodyWelcome = `We are going to love each other more starting from this day!`
-
-const data = {
-    title: titleWelcome,
-    body: bodyWelcome
-}
-
 export class SendEmailForUserSignedUp extends Sender<UserSignedUpInt> {
     protected readonly sendingReason = SendingReasons.UserSignedUp
-    data = data
+    protected data: UserSignedUpInt['data']
 
-    constructor(email: string) {
-        super(email, data)
+    protected getData = (eventData: UserSignedUpInt['eventData']): UserSignedUpInt['data'] => {
+        const titleWelcome = 'Welcome to Zombilet!'
+        const bodyWelcome = `
+                                We are going to love each other more starting from this day!
+
+                                You can now log in within your e-mail address as: ${eventData.email}
+        
+                            `
+
+        const data = {
+            title: titleWelcome,
+            body: bodyWelcome,
+        }
+
+        return data
+    }
+
+    constructor(email: string, eventData: UserSignedUpInt['eventData']) {
+        super()
+
+        this.data = this.getData(eventData)
+
+        this.sendEmailTo(email)
     }
 }
