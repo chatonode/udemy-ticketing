@@ -11,7 +11,7 @@ interface UserAttrs {
 // Single User Document after Creation
 export interface UserDoc extends mongoose.Document {
     id: string
-    email: number
+    email: string
     version: number
 }
 
