@@ -46,10 +46,13 @@ const userSchema = new mongoose.Schema({
             delete ret.password
 
             // __v -> -
-            delete ret.__v
+            // delete ret.__v   //Disabled for using 'version'
         }
     }
 })
+
+// Using 'version'
+userSchema.set('versionKey', 'version')
 
 /*
     Mongoose Middleware | 'this' refers to User Document

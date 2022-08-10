@@ -4,6 +4,8 @@ import { Listener, Subjects, UserSignedUpEvent } from '@chato-zombilet/common'
 
 import { queueGroupName } from './queue-group-name'
 
+import { User } from '../../models/user'
+
 // Sender
 import { SendEmailForUserSignedUp } from '../../services/email/sendgrid/sender/user-signed-up'
 
@@ -12,9 +14,15 @@ export class UserSignedUpListener extends Listener<UserSignedUpEvent> {
     queueGroupName = queueGroupName
 
     async onMessage(eventData: UserSignedUpEvent['data'], msg: Message): Promise<void> {
-        const { email } = eventData
+        // const { id, email } = eventData
 
-        new SendEmailForUserSignedUp(email, eventData)
+        // const createdUser = User.build({
+        //     id,
+        //     email
+        // })
+        // await createdUser.save()
+
+        // new SendEmailForUserSignedUp(email, eventData)
 
         msg.ack()
     }
