@@ -8,10 +8,13 @@ export class OrderCompletedListener extends Listener<OrderCompletedEvent> {
     readonly subject = Subjects.OrderCompleted
     queueGroupName = queueGroupName
 
-    async onMessage(data: OrderCompletedEvent['data'], msg: Message): Promise<void> {
-        const { id: orderId, status } = data
+    async onMessage(eventData: OrderCompletedEvent['data'], msg: Message): Promise<void> {
+        const {
+            id: orderId,
+            status: orderStatus
+        } = eventData
 
-        console.log('ORDER COMPLETED: ', data)
+        console.log('ORDER COMPLETED: ', eventData)
 
         msg.ack()
     }

@@ -11,10 +11,10 @@ export class UserSignedInListener extends Listener<UserSignedInEvent> {
     readonly subject = Subjects.UserSignedIn
     queueGroupName = queueGroupName
 
-    async onMessage(data: UserSignedInEvent['data'], msg: Message): Promise<void> {
-        const { email } = data
+    async onMessage(eventData: UserSignedInEvent['data'], msg: Message): Promise<void> {
+        const { email } = eventData
 
-        new SendEmailForUserSignedIn(email)
+        new SendEmailForUserSignedIn(email, eventData)
 
         msg.ack()
     }

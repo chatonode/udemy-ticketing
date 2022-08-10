@@ -8,11 +8,20 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
     readonly subject = Subjects.OrderCreated
     queueGroupName = queueGroupName
 
-    async onMessage(data: OrderCreatedEvent['data'], msg: Message): Promise<void> {
-        const { id: orderId, status, userId, expiresAt, ticket } = data
-        const { id: ticketId, price: ticketPrice } = ticket
+    async onMessage(eventData: OrderCreatedEvent['data'], msg: Message): Promise<void> {
+        const {
+            id: orderId,
+            status: orderStatus,
+            userId,
+            expiresAt: orderExpiresAt,
+            ticket
+        } = eventData
+        const {
+            id: ticketId,
+            price: ticketPrice
+        } = ticket
 
-        console.log('ORDER CREATED: ', data)
+        console.log('ORDER CREATED: ', eventData)
 
         msg.ack()
     }

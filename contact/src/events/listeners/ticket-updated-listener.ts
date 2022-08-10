@@ -8,10 +8,16 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     readonly subject = Subjects.TicketUpdated
     queueGroupName = queueGroupName
 
-    async onMessage(data: TicketUpdatedEvent['data'], msg: Message): Promise<void> {
-        const { id: ticketId, title, price, userId, orderId } = data
+    async onMessage(eventData: TicketUpdatedEvent['data'],msg: Message): Promise<void> {
+        const {
+            id: ticketId,
+            title: ticketTitle,
+            price: ticketPrice,
+            userId,
+            orderId,
+        } = eventData
 
-        console.log('TICKET UPDATED: ', data)
+        console.log('TICKET UPDATED: ', eventData)
 
         msg.ack()
     }
