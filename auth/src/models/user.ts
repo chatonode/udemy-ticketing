@@ -1,19 +1,22 @@
 import mongoose from 'mongoose'
 
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
+
 import { Password } from '../services/password'
 
 // An interface that describes the properties
 // that are required to create a new User
 interface UserAttrs {
-    email: string;
-    password: string;
+    email: string
+    password: string
 }
 
 // An interface that describes the properties
 // that a User Document has
 interface UserDoc extends mongoose.Document {
-    email: string;
-    password: string;
+    email: string
+    password: string
+    version: number
     // createdAt: string;
     // updatedAt: string;
 }
@@ -22,9 +25,8 @@ interface UserDoc extends mongoose.Document {
 // An interface that describes the properties
 // that a User Model has
 interface UserModel extends mongoose.Model<UserDoc> {
-    build(attrs: UserAttrs): UserDoc;
+    build(attrs: UserAttrs): UserDoc
 }
-
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -53,6 +55,7 @@ const userSchema = new mongoose.Schema({
 
 // Using 'version'
 userSchema.set('versionKey', 'version')
+userSchema.plugin(updateIfCurrentPlugin)
 
 /*
     Mongoose Middleware | 'this' refers to User Document
