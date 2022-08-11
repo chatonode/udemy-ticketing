@@ -2,6 +2,7 @@ import { Message } from 'node-nats-streaming'
 
 // Fake Import
 import { natsWrapper } from '../../../nats-wrapper'
+import sgMail from '@sendgrid/mail'
 
 import { UserSignedUpListener } from '../user-signed-up-listener'
 import { UserSignedUpEvent } from '@chato-zombilet/common'
@@ -58,8 +59,21 @@ it('creates the user', async () => {
     const createdUser = await User.findById(data.id)
 
     // Assert
-    expect(createdUser).not.toBeNull()
+    expect(createdUser).toBeDefined()
     expect(createdUser!.email).toEqual(data.email)
+})
+
+it('sends an email', async () => {
+    // Setup
+    const { listener, data, msg } = await setup()
+
+    // call the onMessage function with the data object + message object
+    await listener.onMessage(data, msg)
+
+    // Assert
+    expect(sgMail.send).toHaveBeenCalled()
+    expect(sgMail.send).toHaveBeenCalledTimes(1)
+    
 })
 
 it('acks the message', async () => {
