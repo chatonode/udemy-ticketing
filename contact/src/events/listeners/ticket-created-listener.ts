@@ -4,6 +4,8 @@ import { Listener, Subjects, TicketCreatedEvent } from '@chato-zombilet/common'
 
 import { queueGroupName } from './queue-group-name'
 
+import { User } from '../../models/user'
+
 import { SendEmailForTicketCreated } from '../../services/email/sendgrid/sender/ticket-created'
 
 export class TicketCreatedListener extends Listener<TicketCreatedEvent> {
@@ -18,9 +20,19 @@ export class TicketCreatedListener extends Listener<TicketCreatedEvent> {
             userId
         } = eventData
 
-        console.log('TICKET CREATED: ', eventData)
+        // Fetch user
+        const existingUser = await User.findById(userId)
+        if(!existingUser) {
+            // TODO: Better Error Handling Implementation
+            throw new Error('User not found')
+        }
 
-        // new SendEmailForTicketCreated(email, eventData)
+        new SendEmailForTicketCreated(existingUser.email, {
+            userId,
+            ticketId,
+            ticketTitle,
+            ticketPrice
+        })
 
         msg.ack()
     }

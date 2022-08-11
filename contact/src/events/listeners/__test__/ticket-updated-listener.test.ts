@@ -4,8 +4,8 @@ import { Message } from 'node-nats-streaming'
 import { natsWrapper } from '../../../nats-wrapper'
 import sgMail from '@sendgrid/mail'
 
-import { UserSignedInListener } from '../user-signed-in-listener'
-import { UserSignedInEvent } from '@chato-zombilet/common'
+import { TicketUpdatedListener } from '../ticket-updated-listener'
+import { TicketUpdatedEvent } from '@chato-zombilet/common'
 
 import { User } from '../../../models/user'
 
@@ -15,12 +15,16 @@ import { getValidObjectId } from '../../../test/valid-id-generator'
 // Base Listener Setup
 const setup = async () => {
     // create an instance of the listener
-    const listener = new UserSignedInListener(natsWrapper.client)
+    const listener = new TicketUpdatedListener(natsWrapper.client)
 
     // create a fake data event
-    const data: UserSignedInEvent['data'] = {
+    const data: TicketUpdatedEvent['data'] = {
+        userId: getValidObjectId(),
         id: getValidObjectId(),
-        version: 0
+        title: 'Hasan MEZARCI | Fasa Fiso Fest - Part 2',
+        price: 37.99,
+        orderId: getValidObjectId(),
+        version: 1
     }
 
     // create a fake message object
@@ -47,20 +51,28 @@ const createUser = async (id: string) => {
     return createdUser
 }
 
+
 it('receives the data', async () => {
     // Setup
     const { listener, data, msg } = await setup()
 
     // create an existing user before
-    await createUser(data.id)
+    const createdUser = await createUser(data.id)
 
     // call the onMessage function with the data object + message object
     await listener.onMessage(data, msg)
 
     // Assert
+    expect(data.userId).toBeDefined()
+    expect(data.userId).toEqual(createdUser.id)
     expect(data.id).toBeDefined()
+    expect(data.title).toBeDefined()
+    expect(data.title).toEqual('Hasan MEZARCI | Fasa Fiso Fest - Part 2')
+    expect(data.price).toBeDefined()
+    expect(data.price).toEqual(37.99)
     expect(data.version).toBeDefined()
-    expect(data.version).toEqual(0)
+    expect(data.version).toEqual(1)
+    expect(data.orderId).toBeDefined()
 })
 
 it('throws an error with a non-existing user', async () => {
@@ -86,7 +98,7 @@ it('throws an error with a non-existing user', async () => {
 it('sends an email', async () => {
     // Setup
     const { listener, data, msg } = await setup()
-    
+
     // create an existing user before
     await createUser(data.id)
 
@@ -102,7 +114,7 @@ it('acks the message', async () => {
     // Setup
     const { listener, data, msg } = await setup()
 
-    // create an existing user before
+    // create a user before, to be reached
     await createUser(data.id)
 
     // call the onMessage function with the data object + message object

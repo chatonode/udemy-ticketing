@@ -1,4 +1,4 @@
-import { SendingReasons, EmailData } from '../../base/base-sender'
+import { SendingReasons } from '../../base/base-sender'
 
 import { Sender } from './sender'
 import { TicketCreatedInt } from '../interface/ticket-created-int'
@@ -10,9 +10,9 @@ export class SendEmailForTicketCreated extends Sender<TicketCreatedInt> {
     protected getData = (eventData: TicketCreatedInt['eventData']): TicketCreatedInt['data'] => {
         const titleTicketCreated = `Ticket Created | Zombilet`
         const bodyTicketCreated = `
-                                        Hi ${eventData.userId}!
+                                        Hi there! We have some news related to you:
 
-                                        A ticket has been created. You can see the details listed as below:
+                                        A ticket has been created with your account. You can see the details listed as below:
 
                                         - Owner ID: ${eventData.userId}
                                         - Ticket ID: ${eventData.ticketId}
