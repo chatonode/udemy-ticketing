@@ -67,6 +67,27 @@ it('receives the data', async () => {
     expect(data.version).toEqual(existingUser!.version)
 })
 
+
+it('throws an error with a non-existing user', async () => {
+    // Setup
+    const { listener, data, msg } = await setup()
+
+    // skip creating a user before
+    // await createUser(data.id)
+
+    // Assert: make sure calling the onMessage function with the data object + message object
+    // -> returns an error: Ticket Not Found
+    try {
+        await listener.onMessage(data, msg)
+    } catch (err) {
+        expect(err).toBeDefined()
+    }
+
+    // Assert: Make sure ack function is not called
+    expect(msg.ack).not.toHaveBeenCalled()
+    expect(msg.ack).toHaveBeenCalledTimes(0)
+})
+
 it('acks the message', async () => {
     // Setup
     const { listener, data, msg } = await setup()

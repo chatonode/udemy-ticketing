@@ -12,7 +12,7 @@ export class SendEmailForTicketCreated extends Sender<TicketCreatedInt> {
         const bodyTicketCreated = `
                                         Hi ${eventData.userId}!
 
-                                        A ticket has been created. You can see the details listed as below:
+                                        A ticket has been created with your account. You can see the details listed as below:
 
                                         - Owner ID: ${eventData.userId}
                                         - Ticket ID: ${eventData.ticketId}

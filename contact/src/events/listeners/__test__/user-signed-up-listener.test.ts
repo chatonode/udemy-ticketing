@@ -6,6 +6,8 @@ import { natsWrapper } from '../../../nats-wrapper'
 import { UserSignedUpListener } from '../user-signed-up-listener'
 import { UserSignedUpEvent } from '@chato-zombilet/common'
 
+import { User } from '../../../models/user'
+
 // Helpers
 import { getValidObjectId } from '../../../test/valid-id-generator'
 
@@ -41,8 +43,23 @@ it('receives the data', async () => {
     // call the onMessage function with the data object + message object
     await listener.onMessage(data, msg)
 
-    // Placeholder assertion (only for init)
+    // Assert
     expect(data.email).toEqual('testmail@testmail.com')
+})
+
+it('creates the user', async () => {
+    // Setup
+    const { listener, data, msg } = await setup()
+
+    // call the onMessage function with the data object + message object
+    await listener.onMessage(data, msg)
+
+    // Fetch the user
+    const createdUser = await User.findById(data.id)
+
+    // Assert
+    expect(createdUser).not.toBeNull()
+    expect(createdUser!.email).toEqual(data.email)
 })
 
 it('acks the message', async () => {
