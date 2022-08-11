@@ -16,6 +16,9 @@ beforeAll(async () => {
 })
 
 beforeEach(async () => {
+    // Resetting Mock Functions
+    jest.clearAllMocks()
+
     // All different collections that exist
     const collections = await mongoose.connection.db.collections()
 
@@ -26,6 +29,9 @@ beforeEach(async () => {
 })
 
 afterAll(async () => {
+    // Resetting onSpy
+    jest.restoreAllMocks()
+    
     await mongo.stop()
     await mongoose.connection.close()
 })

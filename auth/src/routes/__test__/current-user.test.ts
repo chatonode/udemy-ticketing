@@ -11,7 +11,8 @@ it('returns a 200 and a response with logged in user', async () => {
         .send()
         .expect(200)
     
-    expect(response.body.currentUser.email).toEqual('test@test.com')
+    expect(response.body.currentUser.email).toContain("test.")
+    expect(response.body.currentUser.email).toContain("@test.com")
 })
 
 it('returns a 200 and a "null" response with not logged in user', async () => {

@@ -40,7 +40,8 @@ router.post(
 
     // Publish an event saying that a user is signed up
     await new UserSignedInPublisher(natsWrapper.client).publish({
-      email: existingUser.email
+      id: existingUser.id,
+      version: existingUser.version
     })
 
     // Generate a JWT
@@ -57,7 +58,10 @@ router.post(
       jwt: userJwt,
     }
 
-    res.status(200).send(existingUser)
+    // Least info within response
+    res.status(200).send({
+      email: existingUser.email
+    })
   }
 )
 

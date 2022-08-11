@@ -35,7 +35,9 @@ router.post(
 
     // Publish an event saying that a user is signed up
     await new UserSignedUpPublisher(natsWrapper.client).publish({
-      email: user.email
+      id: user.id,
+      email: user.email,
+      version: user.version
     })
 
     // Generate a JWT
@@ -43,6 +45,8 @@ router.post(
       //TODO: error TS2322: Type 'String' is not assignable to type 'string'.
       id: user.id as string,  // - Defined as 'id?: any;' at Mongoose document
       email: user.email,
+      // Maybe add 'version' too?
+      // // For "Refresh Token / Access Token Mechanism" feature?
     }
     const secretKey = process.env.JWT_KEY!
     const userJwt = jwt.sign(payload, secretKey)
@@ -52,7 +56,10 @@ router.post(
       jwt: userJwt,
     }
 
-    res.status(201).send(user)
+    // Least info within response
+    res.status(201).send({
+      email: user.email
+    })
   }
 )
 
