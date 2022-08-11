@@ -1,3 +1,5 @@
+import mongoose from 'mongoose'
+
 import { app } from './app'
 
 import sgMail from '@sendgrid/mail'
@@ -17,6 +19,11 @@ const start = async () => {
     // Env: JWT_KEY exists (to be able to use 'process.env.JWT_KEY!')
     if (!process.env.JWT_KEY) {
         throw new Error('JWT_KEY must be defined.')
+    }
+
+    // Env: MONGO_URI exists
+    if (!process.env.MONGO_URI) {
+        throw new Error('MONGO_URI must be defined.')
     }
 
     /* Envs: NATS_CLUSTER_ID, NATS_CLIENT_ID, NATS_URL exists */
@@ -69,7 +76,10 @@ const start = async () => {
         
         // Sendgrid
         sgMail.setApiKey(process.env.SENDGRID_KEY)
-
+        
+        // DB
+        await mongoose.connect(process.env.MONGO_URI)
+        console.log('Connected to MongoDB...')
     } catch (err) {
         console.error(err)
     }
