@@ -6,6 +6,8 @@ import { natsWrapper } from '../../../nats-wrapper'
 import { UserSignedInListener } from '../user-signed-in-listener'
 import { UserSignedInEvent } from '@chato-zombilet/common'
 
+import { User } from '../../../models/user'
+
 // Helpers
 import { getValidObjectId } from '../../../test/valid-id-generator'
 
@@ -16,7 +18,8 @@ const setup = async () => {
 
     // create a fake data event
     const data: UserSignedInEvent['data'] = {
-        email: 'testmail@testmail.com'
+        id: getValidObjectId(),
+        version: 0
     }
 
     // create a fake message object
@@ -32,20 +35,44 @@ const setup = async () => {
     }
 }
 
+// User Creator
+const createUser = async (id: string) => {
+    const createdUser = User.build({
+        id,
+        email: `test.${id}@test.com`
+    })
+    await createdUser.save()
+
+    return createdUser
+}
+
 it('receives the data', async () => {
     // Setup
     const { listener, data, msg } = await setup()
 
+    // create a user before, to be reached
+    await createUser(data.id)
+
     // call the onMessage function with the data object + message object
     await listener.onMessage(data, msg)
 
-    // Placeholder assertion (only for init)
-    expect(data.email).toEqual('testmail@testmail.com')
+    // Reach id and version for asserting
+    const existingUser = await User.findOne({
+        id: data.id,
+        version: data.version
+    })
+
+    // Assert existing 
+    expect(data.id).toEqual(existingUser!.id)
+    expect(data.version).toEqual(existingUser!.version)
 })
 
 it('acks the message', async () => {
     // Setup
     const { listener, data, msg } = await setup()
+
+    // create a user before, to be reached
+    await createUser(data.id)
 
     // call the onMessage function with the data object + message object
     await listener.onMessage(data, msg)

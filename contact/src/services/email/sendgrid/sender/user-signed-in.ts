@@ -10,7 +10,7 @@ export class SendEmailForUserSignedIn extends Sender<UserSignedInInt> {
     protected getData = (eventData: UserSignedInInt['eventData']): UserSignedInInt['data'] => {
         const titleSignIn = 'Sign In Activity | Zombilet!'
         const bodySignIn = `
-                                There is a Sign-In activity within your account linked to ${eventData.email}.
+                                There is a Sign-In activity within your account linked to your user ID as ${eventData.userId}.
             
                                 If this is not you, please contact us immediately at help@zombilet.com.
                             `
@@ -31,4 +31,3 @@ export class SendEmailForUserSignedIn extends Sender<UserSignedInInt> {
         this.sendEmailTo(email)
     }
 }
-

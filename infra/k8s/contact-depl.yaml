@@ -16,6 +16,8 @@ spec:
         - name: contact
           image: chatonode/contact
           env:
+            - name: MONGO_URI
+              value: 'mongodb://orders-mongo-srv:27017/contact'
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:

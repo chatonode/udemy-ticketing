@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contact-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: contact-mongo
+  template:
+    metadata:
+      labels:
+        app: contact-mongo
+    spec:
+      containers:
+        - name: contact-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: contact-mongo-srv
+spec:
+  selector:
+    app: contact-mongo
+  ports:
+    - name: contact-mongo-db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

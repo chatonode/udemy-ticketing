@@ -14,15 +14,18 @@ export class UserSignedUpListener extends Listener<UserSignedUpEvent> {
     queueGroupName = queueGroupName
 
     async onMessage(eventData: UserSignedUpEvent['data'], msg: Message): Promise<void> {
-        // const { id, email } = eventData
+        const { id: userId, email } = eventData
 
-        // const createdUser = User.build({
-        //     id,
-        //     email
-        // })
-        // await createdUser.save()
+        const createdUser = User.build({
+            id: userId,
+            email,
+        })
+        await createdUser.save()
 
-        // new SendEmailForUserSignedUp(email, eventData)
+        new SendEmailForUserSignedUp(createdUser.email, {
+            userId,
+            email
+        })
 
         msg.ack()
     }

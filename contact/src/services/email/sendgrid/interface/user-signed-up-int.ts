@@ -1,6 +1,7 @@
 import { SendingReasons, EmailData, EventData } from '../../base/base-sender'
 
 interface UserSignedUpEventData extends EventData {
+    userId: string
     email: string
 }
 
