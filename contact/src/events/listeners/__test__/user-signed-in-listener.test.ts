@@ -57,7 +57,7 @@ it('receives the data', async () => {
     await listener.onMessage(data, msg)
 
     // Reach id and version for asserting
-    const existingUser = await User.findPreviousVersion({
+    const existingUser = await User.findOne({
         id: data.id,
         version: data.version
     })
@@ -67,31 +67,12 @@ it('receives the data', async () => {
     expect(data.version).toEqual(existingUser!.version)
 })
 
-
-it('does not find a previous version of an existing user', async () => {
-    // Setup
-    const { listener, data, msg } = await setup()
-
-    // create a user before, to be updated
-    await createUser(data.id)
-
-    // Assert: make sure calling the onMessage function with the data object + message object
-    // -> returns an error: User Not Found
-    try {
-        await listener.onMessage({
-            ...data,
-            version: data.version + 1       // Some Future Version of the Event Data
-        }, msg)
-    } catch (err) {
-        expect(err).toBeDefined()
-    }
-
-    expect(msg.ack).not.toHaveBeenCalled()
-})
-
 it('acks the message', async () => {
     // Setup
     const { listener, data, msg } = await setup()
+
+    // create a user before, to be reached
+    await createUser(data.id)
 
     // call the onMessage function with the data object + message object
     await listener.onMessage(data, msg)

@@ -16,11 +16,9 @@ export class UserSignedInListener extends Listener<UserSignedInEvent> {
     async onMessage(eventData: UserSignedInEvent['data'], msg: Message): Promise<void> {
         const { id: userId, version } = eventData
 
-        // Applying in OCC Filtering
-        const existingUser = await User.findPreviousVersion({
-            id: userId,
-            version
-        })
+        // No need to apply in OCC Filtering
+        // // This listener does not update the user, just reads it anyway.
+        const existingUser = await User.findById(userId)
         
         if(!existingUser) {
             // TODO: Better Error Handling Implementation
