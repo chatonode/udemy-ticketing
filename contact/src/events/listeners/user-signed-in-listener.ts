@@ -4,6 +4,8 @@ import { Listener, Subjects, UserSignedInEvent } from '@chato-zombilet/common'
 
 import { queueGroupName } from './queue-group-name'
 
+import { User } from '../../models/user'
+
 // Sender
 import { SendEmailForUserSignedIn } from '../../services/email/sendgrid/sender/user-signed-in'
 
@@ -12,9 +14,22 @@ export class UserSignedInListener extends Listener<UserSignedInEvent> {
     queueGroupName = queueGroupName
 
     async onMessage(eventData: UserSignedInEvent['data'], msg: Message): Promise<void> {
-        const { email } = eventData
+        const { id: userId, version } = eventData
 
-        new SendEmailForUserSignedIn(email, eventData)
+        // Applying in OCC Filtering
+        const existingUser = await User.findPreviousVersion({
+            id: userId,
+            version
+        })
+        
+        if(!existingUser) {
+            // TODO: Better Error Handling Implementation
+            throw new Error('User not found')
+        }
+
+        new SendEmailForUserSignedIn(existingUser.email, {
+            userId
+        })
 
         msg.ack()
     }

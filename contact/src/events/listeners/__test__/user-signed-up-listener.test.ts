@@ -16,7 +16,9 @@ const setup = async () => {
 
     // create a fake data event
     const data: UserSignedUpEvent['data'] = {
-        email: 'testmail@testmail.com'
+        id: getValidObjectId(),
+        email: 'testmail@testmail.com',
+        version: 0
     }
 
     // create a fake message object

@@ -5,8 +5,12 @@ import { UserSignedUpInt } from '../../interface/user-signed-up-int'
 
 import { SendEmailForUserSignedUp } from '../user-signed-up'
 
+// Helpers
+import { getValidObjectId } from '../../../../../test/valid-id-generator'
+
 const getEventData = () => {
     const eventData: UserSignedUpInt['eventData'] =  {
+        userId: getValidObjectId(),
         email: 'newuser@zombilet.com'
     }
 
@@ -21,7 +25,7 @@ it('sends sign-up email', () => {
     expect(sgMail.send).toBeCalledWith(
         expect.objectContaining({
             to: 'newuser@zombilet.com',
-            from: 'somevalidtestemail@sendgrid.com',    // Assigned from 'tests/setup.ts'
+            from: process.env.SENDGRID_EMAIL,    // Assigned from 'tests/setup.ts'
             subject: expect.any(String),
             text: expect.any(String)
         })

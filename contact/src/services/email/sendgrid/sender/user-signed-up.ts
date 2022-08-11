@@ -13,6 +13,8 @@ export class SendEmailForUserSignedUp extends Sender<UserSignedUpInt> {
                                 We are going to love each other more starting from this day!
 
                                 You can now log in within your e-mail address as: ${eventData.email}
+
+                                Your User ID is: ${eventData.userId}
         
                             `
 
