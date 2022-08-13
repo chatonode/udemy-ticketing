@@ -4,7 +4,8 @@ import { Listener, Subjects, UserSignedInEvent } from '@chato-zombilet/common'
 
 import { queueGroupName } from './queue-group-name'
 
-import { User } from '../../models/user'
+// Helpers
+import { getExistingUser } from './helper/get-existing-user'
 
 // Sender
 import { SendEmailForUserSignedIn } from '../../services/email/sendgrid/sender/user-signed-in'
@@ -18,13 +19,9 @@ export class UserSignedInListener extends Listener<UserSignedInEvent> {
 
         // No need to apply in OCC Filtering
         // // This listener does not update the user, just reads it anyway.
-        const existingUser = await User.findById(userId)
+        // Get existing user | Error
+        const existingUser = await getExistingUser(userId)
         
-        if(!existingUser) {
-            // TODO: Better Error Handling Implementation
-            throw new Error('User not found')
-        }
-
         new SendEmailForUserSignedIn(existingUser.email, {
             userId
         })
