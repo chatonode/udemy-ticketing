@@ -1,26 +1,31 @@
 // Fake Import
 import sgMail from '@sendgrid/mail'
 
-import { TicketCreatedInt } from '../../interface/ticket-created-int'
+import { OrderStatus } from '@chato-zombilet/common'
 
-import { SendEmailForTicketCreated } from '../ticket-created'
+import { OrderCreatedInt } from '../../interface/order-created-int'
+
+import { SendEmailForOrderCreated } from '../order-created'
 
 // Helpers
 import { getValidObjectId } from '../../../../../test/valid-id-generator'
+import { getExpiresAt } from '../../../../../test/expires-at-generator'
 
 const getEventData = () => {
-    const eventData: TicketCreatedInt['eventData'] =  {
+    const eventData: OrderCreatedInt['eventData'] =  {
         userId: getValidObjectId(),
+        orderId: getValidObjectId(),
+        orderStatus: OrderStatus.Created,
+        orderExpiresAt: getExpiresAt(10),
         ticketId: getValidObjectId(),
-        ticketTitle: 'Ashalamu Alaykum Brothers Concert',
-        ticketPrice: 99
+        ticketPrice: 29
     }
 
     return eventData
 }
 
-it('sends ticket created email', () => {
-    new SendEmailForTicketCreated('existinguser@zombilet.com', getEventData())
+it('sends order created email', () => {
+    new SendEmailForOrderCreated('existinguser@zombilet.com', getEventData())
 
     expect(sgMail.send).toHaveBeenCalled()
     expect(sgMail.send).toHaveBeenCalledTimes(1)

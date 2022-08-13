@@ -20,7 +20,7 @@ const getEventData = () => {
     return eventData
 }
 
-it('sends sign-up email', () => {
+it('sends ticket updated email', () => {
     new SendEmailForTicketUpdated('existinguser@zombilet.com', getEventData())
 
     expect(sgMail.send).toHaveBeenCalled()

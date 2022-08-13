@@ -4,23 +4,31 @@ import { Message } from 'node-nats-streaming'
 import { natsWrapper } from '../../../nats-wrapper'
 import sgMail from '@sendgrid/mail'
 
-import { UserSignedInListener } from '../user-signed-in-listener'
-import { UserSignedInEvent } from '@chato-zombilet/common'
+import { OrderCreatedListener } from '../order-created-listener'
+import { OrderCreatedEvent, OrderStatus } from '@chato-zombilet/common'
 
 import { User } from '../../../models/user'
 
 // Helpers
 import { getValidObjectId } from '../../../test/valid-id-generator'
+import { getExpiresAt } from '../../../test/expires-at-generator'
 
 // Base Listener Setup
 const setup = async () => {
     // create an instance of the listener
-    const listener = new UserSignedInListener(natsWrapper.client)
+    const listener = new OrderCreatedListener(natsWrapper.client)
 
     // create a fake data event
-    const data: UserSignedInEvent['data'] = {
+    const data: OrderCreatedEvent['data'] = {
+        userId: getValidObjectId(),
         id: getValidObjectId(),
-        version: 0
+        status: OrderStatus.Created,
+        expiresAt: getExpiresAt(10),
+        version: 0,
+        ticket: {
+            id: getValidObjectId(),
+            price: 27.99,
+        }
     }
 
     // create a fake message object
@@ -47,18 +55,27 @@ const createUser = async (id: string) => {
     return createdUser
 }
 
+
 it('receives the data', async () => {
     // Setup
     const { listener, data, msg } = await setup()
 
     // create an existing user before
-    await createUser(data.id)
+    const createdUser = await createUser(data.id)
 
     // call the onMessage function with the data object + message object
     await listener.onMessage(data, msg)
 
     // Assert
+    expect(data.userId).toBeDefined()
+    expect(data.userId).toEqual(createdUser.id)
     expect(data.id).toBeDefined()
+    expect(data.status).toBeDefined()
+    expect(data.status).toEqual(OrderStatus.Created)
+    expect(data.expiresAt).toBeDefined()
+    expect(data.ticket.id).toBeDefined()
+    expect(data.ticket.price).toBeDefined()
+    expect(data.ticket.price).toEqual(27.99)
     expect(data.version).toBeDefined()
     expect(data.version).toEqual(0)
 })
@@ -86,7 +103,7 @@ it('throws an error with a non-existing user', async () => {
 it('sends an email', async () => {
     // Setup
     const { listener, data, msg } = await setup()
-    
+
     // create an existing user before
     await createUser(data.id)
 

@@ -83,7 +83,7 @@ it('throws an error with a non-existing user', async () => {
     // await createUser(data.id)
 
     // Assert: make sure calling the onMessage function with the data object + message object
-    // -> returns an error: Ticket Not Found
+    // -> returns an error: User Not Found
     try {
         await listener.onMessage(data, msg)
     } catch (err) {

@@ -7,7 +7,7 @@ import { queueGroupName } from './queue-group-name'
 // Helpers
 import { getExistingUser } from './helper/get-existing-user'
 
-// import { SendEmailForOrderCreated } from '../../services/email/sendgrid/sender/order-created'
+import { SendEmailForOrderCreated } from '../../services/email/sendgrid/sender/order-created'
 
 export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
     readonly subject = Subjects.OrderCreated
@@ -28,14 +28,14 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
         // Get existing user | Error
         const existingUser = await getExistingUser(userId)
 
-        // new SendEmailForOrderCreated(existingUser.email, {
-        //     userId,
-        //     ticketId,
-        //     ticketPrice,
-        //     orderId,
-        //     orderStatus,
-        //     orderExpiresAt
-        // })
+        new SendEmailForOrderCreated(existingUser.email, {
+            userId,
+            orderId,
+            orderStatus,
+            orderExpiresAt,
+            ticketId,
+            ticketPrice,
+        })
 
         msg.ack()
     }
