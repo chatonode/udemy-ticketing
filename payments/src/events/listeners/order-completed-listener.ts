@@ -4,7 +4,7 @@ import { Listener, Subjects, OrderCompletedEvent } from '@chato-zombilet/common'
 
 import { queueGroupName } from './queue-group-name'
 
-import { Order, OrderStatus } from '../../models/order'
+import { Order } from '../../models/order'
 
 export class OrderCompletedListener extends Listener<OrderCompletedEvent> {
     readonly subject = Subjects.OrderCompleted

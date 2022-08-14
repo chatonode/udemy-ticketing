@@ -19,8 +19,8 @@ const setup = async () => {
 
     // create a fake data event
     const id = getValidObjectId()
-    const ticketId = getValidObjectId()
     const data: OrderCompletedEvent['data'] = {
+        userId: getValidObjectId(),
         id,
         version: 0 + 1, // 0: Created -> 1: Completed
         status: OrderStatus.Completed
@@ -40,8 +40,7 @@ const setup = async () => {
 }
 
 // Order Creator
-const createOrder = async (id: string) => {
-    const userId = getValidObjectId()
+const createOrder = async (userId: string, id: string) => {
     const createdOrder = Order.build({
         id,
         userId,
@@ -58,7 +57,7 @@ it('does not find a non-existing order', async () => {
     const { listener, data, msg } = await setup()
 
     // Create and Delete a Created order
-    await createOrder(data.id)
+    await createOrder(data.userId, data.id)
     await Order.findByIdAndDelete(data.id)
 
     // Assert: make sure calling the onMessage function with the data object + message object
@@ -75,7 +74,7 @@ it('does not find a previous version of an existing order', async () => {
     const { listener, data, msg } = await setup()
 
     // create an order before, to be completed
-    await createOrder(data.id)
+    await createOrder(data.userId, data.id)
 
     // Assert: make sure calling the onMessage function with the data object + message object
     // -> returns an error: Order Not Found
@@ -99,7 +98,7 @@ it('finds, completes, and saves an existing order', async () => {
     const { listener, data, msg } = await setup()
 
     // create an order before, to be completed
-    const createdOrder = await createOrder(data.id)
+    const createdOrder = await createOrder(data.userId, data.id)
 
     // call the onMessage function with the data object + message object
     await listener.onMessage(data, msg)
@@ -108,8 +107,12 @@ it('finds, completes, and saves an existing order', async () => {
     const completedOrder = await Order.findById(createdOrder.id)
 
     expect(completedOrder).toBeDefined()
-    expect(completedOrder!.version).toEqual(data.version)
 
+    // User
+    expect(completedOrder!.userId).toBeDefined()
+    expect(completedOrder!.userId).toEqual(data.userId)
+
+    expect(completedOrder!.version).toEqual(data.version)
     expect(completedOrder!.version).toEqual(createdOrder.version + 1)
     expect(completedOrder!.price).toEqual(createdOrder.price)
 
@@ -123,7 +126,7 @@ it('acks the message', async () => {
     const { listener, data, msg } = await setup()
 
     // create an order before, to be completed
-    await createOrder(data.id)
+    await createOrder(data.userId, data.id)
 
     // call the onMessage function with the data object + message object
     await listener.onMessage(data, msg)
