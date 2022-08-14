@@ -1,18 +1,18 @@
 import { SendingReasons } from '../../base/base-sender'
 
 import { Sender } from './sender'
-import { OrderCompletedInt } from '../interface/order-completed-int'
+import { OrderCancelledInt } from '../interface/order-cancelled-int'
 
-export class SendEmailForOrderCompleted extends Sender<OrderCompletedInt> {
-    protected readonly sendingReason = SendingReasons.OrderCompleted
-    protected data: OrderCompletedInt['data']
+export class SendEmailForOrderCancelled extends Sender<OrderCancelledInt> {
+    protected readonly sendingReason = SendingReasons.OrderCancelled
+    protected data: OrderCancelledInt['data']
 
-    protected getData = (eventData: OrderCompletedInt['eventData']): OrderCompletedInt['data'] => {
-        const titleOrderCompleted = `Order Completed | Zombilet`
-        const bodyOrderCompleted = `
+    protected getData = (eventData: OrderCancelledInt['eventData']): OrderCancelledInt['data'] => {
+        const titleOrderCancelled = `Order Cancelled | Zombilet`
+        const bodyOrderCancelled = `
                                         Hi there! We have some news related to you:
 
-                                        An order has been completed with your account. You can see the details listed as below:
+                                        An order has been cancelled with your account. You can see the details listed as below:
 
                                         - Owner ID: ${eventData.userId}
                                         - Order ID: ${eventData.orderId}
@@ -23,14 +23,14 @@ export class SendEmailForOrderCompleted extends Sender<OrderCompletedInt> {
                                     `
 
         const data = {
-            title: titleOrderCompleted,
-            body: bodyOrderCompleted,
+            title: titleOrderCancelled,
+            body: bodyOrderCancelled,
         }
 
         return data
     }
 
-    constructor(email: string, eventData: OrderCompletedInt['eventData']) {
+    constructor(email: string, eventData: OrderCancelledInt['eventData']) {
         super()
         this.data = this.getData(eventData)
 

@@ -56,7 +56,7 @@ it('receives the data', async () => {
     const { listener, data, msg } = await setup()
 
     // create an existing user before
-    const createdUser = await createUser(data.id)
+    const createdUser = await createUser(data.userId)
 
     // call the onMessage function with the data object + message object
     await listener.onMessage(data, msg)
@@ -78,7 +78,7 @@ it('throws an error with a non-existing user', async () => {
     const { listener, data, msg } = await setup()
 
     // skip creating a user before
-    // await createUser(data.id)
+    // await createUser(data.userId)
 
     // Assert: make sure calling the onMessage function with the data object + message object
     // -> returns an error: User Not Found
@@ -98,7 +98,7 @@ it('sends an email', async () => {
     const { listener, data, msg } = await setup()
 
     // create an existing user before
-    await createUser(data.id)
+    await createUser(data.userId)
 
     // call the onMessage function with the data object + message object
     await listener.onMessage(data, msg)
@@ -113,7 +113,7 @@ it('acks the message', async () => {
     const { listener, data, msg } = await setup()
 
     // create an existing user before
-    await createUser(data.id)
+    await createUser(data.userId)
 
     // call the onMessage function with the data object + message object
     await listener.onMessage(data, msg)

@@ -2,14 +2,14 @@ import { OrderStatus } from '@chato-zombilet/common'
 
 import { SendingReasons, EmailData, EventData } from '../../base/base-sender'
 
-interface OrderCompletedEventData extends EventData {
+interface OrderCancelledEventData extends EventData {
     userId: string
     orderId: string
     orderStatus: OrderStatus
 }
 
-export interface OrderCompletedInt {
-    sendingReason: SendingReasons.OrderCompleted
+export interface OrderCancelledInt {
+    sendingReason: SendingReasons.OrderCancelled
     data: EmailData
-    eventData: OrderCompletedEventData
+    eventData: OrderCancelledEventData
 }
