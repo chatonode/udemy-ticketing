@@ -6,7 +6,7 @@ import { natsWrapper } from '../../../nats-wrapper'
 const natsWrapperSpy = jest.spyOn(natsWrapper.client, "publish")
 
 import { OrderCancelledListener } from '../order-cancelled-listener'
-import { OrderCancelledEvent, TicketUpdatedEvent } from '@chato-zombilet/common'
+import { OrderStatus, OrderCancelledEvent, TicketUpdatedEvent } from '@chato-zombilet/common'
 
 // Model
 import { Ticket } from '../../../models/ticket'
@@ -19,12 +19,14 @@ const setup = async () => {
     // create an instance of the listener
     const listener = new OrderCancelledListener(natsWrapper.client)
 
+    const userId = getValidObjectId()
+
     // create a ticket before, to be unreserved
     const orderId = getValidObjectId()
     const reservedTicket = Ticket.build({
         title: 'Enes Freedom Mac Lubbe Dunk Contest',
         price: 15.07,
-        userId: getValidObjectId(),
+        userId
     })
     await reservedTicket.save()
 
@@ -34,10 +36,11 @@ const setup = async () => {
 
     // create a fake data event
     const id = reservedTicket.orderId!
-    const userId = getValidObjectId()
     const data: OrderCancelledEvent['data'] = {
+        userId,
         id,
         version: 1,
+        status: OrderStatus.Cancelled,
         ticket: {
             id: reservedTicket.id,
         },
@@ -87,6 +90,10 @@ it(`finds, unreserves, and saves an existing ticket; without the 'orderId' prope
     expect(unreservedTicket!.orderId).toBeUndefined()
 
     expect(unreservedTicket!.orderId).not.toEqual(data.id)
+
+    // User
+    expect(unreservedTicket!.userId).toBeDefined()
+    expect(unreservedTicket!.userId).toEqual(data.userId)
 })
 
 it(`publishes a 'ticket:updated' event`, async () => {
