@@ -11,7 +11,7 @@ export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
     queueGroupName = queueGroupName
 
     async onMessage(data: OrderCancelledEvent['data'], msg: Message): Promise<void> {
-        const { id, version, ticket } = data
+        const { id, version } = data
 
         // Applying in OCC Filtering
         const order = await Order.findPreviousVersion({

@@ -21,8 +21,10 @@ const setup = async () => {
     const id = getValidObjectId()
     const ticketId = getValidObjectId()
     const data: OrderCancelledEvent['data'] = {
+        userId: getValidObjectId(),
         id,
         version: 0 + 1, // 0: Created -> 1: Cancelled
+        status: OrderStatus.Cancelled,
         ticket: {
             id: ticketId,
         },
@@ -42,8 +44,7 @@ const setup = async () => {
 }
 
 // Order Creator
-const createOrder = async (id: string) => {
-    const userId = getValidObjectId()
+const createOrder = async (userId: string, id: string) => {
     const createdOrder = Order.build({
         id,
         userId,
@@ -60,7 +61,7 @@ it('does not find a non-existing order', async () => {
     const { listener, data, msg } = await setup()
 
     // Create and Delete a Created order
-    await createOrder(data.id)
+    await createOrder(data.userId, data.id)
     await Order.findByIdAndDelete(data.id)
 
     // Assert: make sure calling the onMessage function with the data object + message object
@@ -77,7 +78,7 @@ it('does not find a previous version of an existing order', async () => {
     const { listener, data, msg } = await setup()
 
     // create an order before, to be cancelled
-    await createOrder(data.id)
+    await createOrder(data.userId, data.id)
 
     // Assert: make sure calling the onMessage function with the data object + message object
     // -> returns an error: Order Not Found
@@ -101,7 +102,7 @@ it('finds, cancels, and saves an existing order', async () => {
     const { listener, data, msg } = await setup()
 
     // create an order before, to be cancelled
-    const createdOrder = await createOrder(data.id)
+    const createdOrder = await createOrder(data.userId, data.id)
 
     // call the onMessage function with the data object + message object
     await listener.onMessage(data, msg)
@@ -110,6 +111,11 @@ it('finds, cancels, and saves an existing order', async () => {
     const cancelledOrder = await Order.findById(createdOrder.id)
 
     expect(cancelledOrder).toBeDefined()
+
+    // User
+    expect(cancelledOrder!.userId).toBeDefined()
+    expect(cancelledOrder!.userId).toEqual(data.userId)
+
     expect(cancelledOrder!.version).toEqual(data.version)
 
     expect(cancelledOrder!.version).toEqual(createdOrder.version + 1)
@@ -125,7 +131,7 @@ it('acks the message', async () => {
     const { listener, data, msg } = await setup()
 
     // create an order before, to be updated
-    await createOrder(data.id)
+    await createOrder(data.userId, data.id)
 
     // call the onMessage function with the data object + message object
     await listener.onMessage(data, msg)
