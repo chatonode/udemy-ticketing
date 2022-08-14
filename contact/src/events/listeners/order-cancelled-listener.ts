@@ -4,20 +4,30 @@ import { Listener, Subjects, OrderCancelledEvent } from '@chato-zombilet/common'
 
 import { queueGroupName } from './queue-group-name'
 
+// Helpers
+import { getExistingUser } from './helper/get-existing-user'
+
+import { SendEmailForOrderCancelled } from '../../services/email/sendgrid/sender/order-cancelled'
+
 export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
     readonly subject = Subjects.OrderCancelled
     queueGroupName = queueGroupName
     
     async onMessage(eventData: OrderCancelledEvent['data'], msg: Message): Promise<void> {
         const {
+            userId,
             id: orderId,
-            ticket
+            status: orderStatus
         } = eventData
-        const {
-            id: ticketId
-        } = ticket
 
-        console.log('ORDER CANCELLED: ', eventData)
+        // Get existing user | Error
+        const existingUser = await getExistingUser(userId)
+
+        new SendEmailForOrderCancelled(existingUser.email, {
+            userId,
+            orderId,
+            orderStatus
+        })
 
         msg.ack()
     }
