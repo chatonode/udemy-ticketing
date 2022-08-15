@@ -26,6 +26,7 @@ export class PaymentCreatedListener extends Listener<PaymentCreatedEvent> {
 
         // Publisher(Optional) Order literally DIES here in our app on its final state as 'completed'.
         new OrderCompletedPublisher(this.client).publish({
+            userId: order.userId,
             id: order.id,
             version: order.version,
             status: order.status
