@@ -40,8 +40,10 @@ router.delete(
 
         // Publish an event saying that an order was cancelled
         await new OrderCancelledPublisher(natsWrapper.client).publish({
+            userId: order.userId,
             id: order.id,
             version: order.version,
+            status: order.status,
             ticket: {
                 id: order.ticket.id
             }
