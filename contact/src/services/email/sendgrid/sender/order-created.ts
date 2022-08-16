@@ -17,7 +17,7 @@ export class SendEmailForOrderCreated extends Sender<OrderCreatedInt> {
                                         - Owner ID: ${eventData.userId}
                                         - Order ID: ${eventData.orderId}
                                         - Order Status: ${eventData.orderStatus}
-                                        - Order Expires At: ${new Date(eventData.orderExpiresAt).getTime()}
+                                        - Order Expires At: ${new Date(eventData.orderExpiresAt)}
                                         - Ticket ID: ${eventData.ticketId}
                                         - Ticket Price: ${eventData.ticketPrice}
             
