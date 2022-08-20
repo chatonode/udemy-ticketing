@@ -9,7 +9,7 @@ export { OrderStatus }
 // Properties to create a new Order Document
 interface OrderAttrs {
     id: string
-    // version: string      // Stephen added, but not needed during creation
+    // version: number      // Stephen added, but not needed during creation
     userId: string
     status: OrderStatus
     price: number

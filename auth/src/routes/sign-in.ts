@@ -38,7 +38,7 @@ router.post(
       throw new BadRequestError('Invalid Credentials!')
     }
 
-    // Publish an event saying that a user is signed up
+    // Publish an event saying that a user is signed in
     await new UserSignedInPublisher(natsWrapper.client).publish({
       id: existingUser.id,
       version: existingUser.version
