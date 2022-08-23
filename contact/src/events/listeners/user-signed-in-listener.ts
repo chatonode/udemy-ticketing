@@ -5,7 +5,7 @@ import { Listener, Subjects, UserSignedInEvent } from '@chato-zombilet/common'
 import { queueGroupName } from './queue-group-name'
 
 // Helpers
-import { getExistingUser } from './helper/get-existing-user'
+import { getExistingUser } from './helpers/get-existing-user'
 
 // Sender
 import { SendEmailForUserSignedIn } from '../../services/email/sendgrid/sender/user-signed-in'
