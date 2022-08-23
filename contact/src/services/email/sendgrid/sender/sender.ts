@@ -9,8 +9,6 @@ export abstract class Sender<T extends BaseSender> {
     protected abstract sendingReason: T['sendingReason']
     protected abstract data: T['data']
     
-    // protected eventData?: T['eventData']
-
     protected abstract getData: (eventData: T['eventData']) => T['data']
 
     protected sendEmailTo(email: string): void {

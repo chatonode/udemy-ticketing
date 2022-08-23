@@ -5,7 +5,7 @@ import { Listener, Subjects, OrderCancelledEvent } from '@chato-zombilet/common'
 import { queueGroupName } from './queue-group-name'
 
 // Helpers
-import { getExistingUser } from './helper/get-existing-user'
+import { getExistingUser } from './helpers/get-existing-user'
 
 import { SendEmailForOrderCancelled } from '../../services/email/sendgrid/sender/order-cancelled'
 

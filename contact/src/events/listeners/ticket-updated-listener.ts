@@ -5,7 +5,7 @@ import { Listener, Subjects, TicketUpdatedEvent } from '@chato-zombilet/common'
 import { queueGroupName } from './queue-group-name'
 
 // Helpers
-import { getExistingUser } from './helper/get-existing-user'
+import { getExistingUser } from './helpers/get-existing-user'
 
 import { SendEmailForTicketUpdated } from '../../services/email/sendgrid/sender/ticket-updated'
 
