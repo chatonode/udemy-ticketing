@@ -24,7 +24,7 @@ const setup = async () => {
     const data: UserForgotPasswordEvent['data'] = {
         id: getValidObjectId(),
         tokenValue,
-        tokenExpiresAt: addHoursToDate(new Date(), 1),
+        tokenExpiresAt: addHoursToDate(new Date(), 1).toISOString(),
         version: 0
     }
 

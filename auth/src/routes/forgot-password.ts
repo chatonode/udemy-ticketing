@@ -48,7 +48,7 @@ router.post(
     await new UserForgotPasswordPublisher(natsWrapper.client).publish({
       id: existingUser.id,
       tokenValue: token.value,
-      tokenExpiresAt: token.expiresAt,
+      tokenExpiresAt: token.expiresAt.toISOString(),
       version: existingUser.version
     })
 
