@@ -13,7 +13,7 @@ const getEventData = () => {
     const eventData: UserForgotPasswordInt['eventData'] =  {
         userId: getValidObjectId(),
         tokenValue: 'sOmErAnDomStr1n6G',
-        tokenExpiresAt: addHoursToDate(new Date(), 1),
+        tokenExpiresAt: addHoursToDate(new Date(), 1).toISOString(),
     }
 
     return eventData

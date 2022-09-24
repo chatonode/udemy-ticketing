@@ -3,7 +3,7 @@ import { SendingReasons, EmailData, EventData } from '../../base/base-sender'
 interface UserForgotPasswordEventData extends EventData {
     userId: string
     tokenValue: string
-    tokenExpiresAt: Date
+    tokenExpiresAt: string
 }
 
 export interface UserForgotPasswordInt {
