@@ -3,7 +3,7 @@ import { body } from 'express-validator'
 
 import { randomBytes } from 'crypto'
 
-import { validateRequest, BadRequestError } from '@chato-zombilet/common'
+import { validateRequest } from '@chato-zombilet/common'
 import { User } from '../models/user'
 import { Token, TokenType } from '../models/token'
 

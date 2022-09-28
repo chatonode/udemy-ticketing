@@ -2,8 +2,7 @@ import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
 
 import { validateRequest, NotFoundError, TokenExpiredError } from '@chato-zombilet/common'
-import { User } from '../models/user'
-import { Token, TokenType } from '../models/token'
+import { Token } from '../models/token'
 
 const router = express.Router()
 
