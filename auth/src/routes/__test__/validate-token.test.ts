@@ -91,12 +91,11 @@ it(`validates and returns a 200 the existing and non-expired token`, async () =>
       await token.save()
 
     /* Assert */
-    const response = await request(app)
+    await request(app)
         .post('/api/users/validate-token')
         .send({
             token: value
         })
     .expect(200)
 
-    expect(response.body.type).toEqual(TokenType.ForgotPassword)
 })

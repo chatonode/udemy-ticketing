@@ -30,10 +30,8 @@ router.post(
             throw new TokenExpiredError()
         }
 
-        // Send token 'type' to the 'client' service
-        res.status(200).send({
-            type: existingToken.type
-        })
+        // Send response
+        res.status(200).send()
     }
 )
 

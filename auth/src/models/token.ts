@@ -4,7 +4,7 @@ import { createHash } from 'crypto'
 
 import { UserDoc } from './user'
 
-import { TokenType } from './types/token-type'
+import { TokenType } from '@chato-zombilet/common'
 // More Centralized TokenType Exporter
 export { TokenType }
 
