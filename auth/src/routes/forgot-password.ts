@@ -3,7 +3,7 @@ import { body } from 'express-validator'
 
 import { randomBytes } from 'crypto'
 
-import { validateRequest, BadRequestError } from '@chato-zombilet/common'
+import { validateRequest } from '@chato-zombilet/common'
 import { User } from '../models/user'
 import { Token, TokenType } from '../models/token'
 
@@ -33,8 +33,7 @@ router.post(
     }
 
     // Create a token
-    const value = randomBytes(10).toString('hex')  // Enough length?
-    // @Ref-link: https://stackoverflow.com/questions/1050720/how-to-add-hours-to-a-date-object
+    const value = randomBytes(32).toString('hex')  // Enough length?
     const expiresAt = addHoursToDate(new Date(), 1)
     const token = Token.build({
         user: existingUser.id,
@@ -47,7 +46,7 @@ router.post(
     // Publish an event saying that a user forgot password
     await new UserForgotPasswordPublisher(natsWrapper.client).publish({
       id: existingUser.id,
-      tokenValue: token.value,
+      tokenValue: value,  // Publishing plain token 'value', instead of hashed 'value' 
       tokenExpiresAt: token.expiresAt.toISOString(),
       version: existingUser.version
     })

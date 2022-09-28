@@ -8,6 +8,7 @@ import { signInRouter } from './routes/sign-in'
 import { signOutRouter } from './routes/sign-out'
 import { currentUserRouter } from './routes/current-user'
 import { forgotPasswordRouter } from './routes/forgot-password'
+import { validateTokenRouter } from './routes/validate-token'
 
 const app = express()
 app.set('trust proxy', true)    // Traffic is being proxied by Ingress NGINX
@@ -28,6 +29,7 @@ app.use(signInRouter)
 app.use(signOutRouter)
 app.use(currentUserRouter)
 app.use(forgotPasswordRouter)
+app.use(validateTokenRouter)
 
 // 'Handler Not Found' for all HTTP Methods
 app.all('*', async () => {
