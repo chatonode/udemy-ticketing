@@ -3,7 +3,7 @@ import { app } from '../../app'
 
 // Models
 import { User } from '../../models/user'
-import { Token } from '../../models/token'
+import { Token, TokenType } from '../../models/token'
 
 // It is STILL going to import fake natsWrapper
 import { natsWrapper } from '../../nats-wrapper'
@@ -75,6 +75,7 @@ it(`creates a token`, async () => {
 
     // Assert
     expect(existingToken).toBeDefined()
+    expect(existingToken!.type).toEqual(TokenType.ForgotPassword)
 })
 
 it(`publishes a 'user:forgot-password' event`, async () => {

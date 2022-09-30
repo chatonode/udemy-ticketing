@@ -1,6 +1,8 @@
 // Fake Import
 import sgMail from '@sendgrid/mail'
 
+import { TokenType } from '@chato-zombilet/common'
+
 import { UserForgotPasswordInt } from '../../interface/user-forgot-password-int'
 
 import { SendEmailForUserForgotPassword } from '../user-forgot-password'
@@ -12,6 +14,7 @@ import { addHoursToDate } from '../../../../../events/listeners/__test__/helpers
 const getEventData = () => {
     const eventData: UserForgotPasswordInt['eventData'] =  {
         userId: getValidObjectId(),
+        tokenType: TokenType.ForgotPassword,
         tokenValue: 'sOmErAnDomStr1n6G',
         tokenExpiresAt: addHoursToDate(new Date(), 1).toISOString(),
     }

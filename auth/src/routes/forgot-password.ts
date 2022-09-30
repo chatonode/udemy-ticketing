@@ -46,9 +46,12 @@ router.post(
     // Publish an event saying that a user forgot password
     await new UserForgotPasswordPublisher(natsWrapper.client).publish({
       id: existingUser.id,
-      tokenValue: value,  // Publishing plain token 'value', instead of hashed 'value' 
-      tokenExpiresAt: token.expiresAt.toISOString(),
-      version: existingUser.version
+      version: existingUser.version,
+      token: {
+        value,  // Publishing plain token 'value', instead of hashed 'value' (during pre-save)
+        type: token.type,
+        expiresAt: token.expiresAt.toISOString(),
+      }
     })
 
     // Least info within response

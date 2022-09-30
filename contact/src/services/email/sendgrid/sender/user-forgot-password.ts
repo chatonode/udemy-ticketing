@@ -20,7 +20,7 @@ export class SendEmailForUserForgotPassword extends Sender<UserForgotPasswordInt
                                         
                                         You can click the link below and reset your password:
 
-                                        https://zombilet.dev/users/click?t=${eventData.tokenValue}
+                                        https://zombilet.dev/users/click?t=${eventData.tokenValue}&type=${eventData.tokenType}
 
                                         - Owner ID: ${eventData.userId}
 

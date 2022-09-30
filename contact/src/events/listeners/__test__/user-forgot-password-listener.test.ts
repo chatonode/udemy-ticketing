@@ -5,7 +5,7 @@ import { natsWrapper } from '../../../nats-wrapper'
 import sgMail from '@sendgrid/mail'
 
 import { UserForgotPasswordListener } from '../user-forgot-password-listener'
-import { UserForgotPasswordEvent } from '@chato-zombilet/common'
+import { UserForgotPasswordEvent, TokenType } from '@chato-zombilet/common'
 
 import { User } from '../../../models/user'
 
@@ -19,13 +19,18 @@ const setup = async () => {
     const listener = new UserForgotPasswordListener(natsWrapper.client)
 
     // create a fake data event
-    const tokenValue = 'sOmErAnDomStr1n6G'
+    const value = 'sOmErAnDomStr1n6G'
+    const type = TokenType.ForgotPassword
+    const expiresAt = addHoursToDate(new Date(), 1).toISOString()
 
     const data: UserForgotPasswordEvent['data'] = {
         id: getValidObjectId(),
-        tokenValue,
-        tokenExpiresAt: addHoursToDate(new Date(), 1).toISOString(),
-        version: 0
+        version: 0,
+        token: {
+            value,
+            type,
+            expiresAt
+        }
     }
 
     // create a fake message object
@@ -66,11 +71,11 @@ it('receives the data', async () => {
     // Assert
     expect(data.id).toBeDefined()
     expect(data.id).toEqual(createdUser.id)
-    expect(data.tokenValue).toBeDefined()
-    expect(data.tokenValue).toEqual('sOmErAnDomStr1n6G')
-    expect(data.tokenExpiresAt).toBeDefined()
     expect(data.version).toBeDefined()
     expect(data.version).toEqual(0)
+    expect(data.token.value).toBeDefined()
+    expect(data.token.value).toEqual('sOmErAnDomStr1n6G')
+    expect(data.token.expiresAt).toBeDefined()
 })
 
 it('throws an error with a non-existing user', async () => {

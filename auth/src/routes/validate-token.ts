@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
 
-import { validateRequest, NotFoundError, TokenExpiredError } from '@chato-zombilet/common'
+import { validateRequest, NotFoundError, TokenExpiredError, TokenType } from '@chato-zombilet/common'
 import { Token } from '../models/token'
 
 const router = express.Router()
@@ -9,17 +9,24 @@ const router = express.Router()
 router.post(
     '/api/users/validate-token',
     [
-        body('token').exists().withMessage('Token must be provided.')
+        body('token').not().isEmpty().withMessage('Token must be provided.'),
+        body('type')
+            .not()
+            .isEmpty()
+            .withMessage('Token type must be provided.')
+            // @ref-link: https://stackoverflow.com/questions/63753808/how-to-check-the-type-is-enum-or-not-in-typescript
+            .custom((input: string) => (Object.values(TokenType) as string[]).includes(input))
+            .withMessage('Token type must be valid.')
     ],
     validateRequest,
     async (req: Request, res: Response) => {
-        const { token } = req.body
+        const { token, type } = req.body
 
         // Hash incoming token
         const value = Token.toHash(token)
 
         // Fetch the token
-        const existingToken = await Token.findOne({ value })
+        const existingToken = await Token.findOne({ value, type })
 
         if (!existingToken) {
             throw new NotFoundError()
@@ -30,10 +37,8 @@ router.post(
             throw new TokenExpiredError()
         }
 
-        // Send token 'type' to the 'client' service
-        res.status(200).send({
-            type: existingToken.type
-        })
+        // Send response
+        res.status(200).send()
     }
 )
 
