@@ -1,6 +1,6 @@
 import { Message } from 'node-nats-streaming'
 
-import { Listener, Subjects, TokenType, UserForgotPasswordEvent } from '@chato-zombilet/common'
+import { Listener, Subjects, UserForgotPasswordEvent } from '@chato-zombilet/common'
 
 import { queueGroupName } from './queue-group-name'
 

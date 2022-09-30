@@ -4,7 +4,7 @@ import { SendingReasons, EmailData, EventData } from '../../base/base-sender'
 interface UserForgotPasswordEventData extends EventData {
     userId: string
     tokenValue: string
-    tokenType: TokenType.ForgotPassword
+    tokenType: TokenType
     tokenExpiresAt: string
 }
 
