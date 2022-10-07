@@ -1,9 +1,10 @@
 import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
-import jwt from 'jsonwebtoken'
 
 import { validateRequest, BadRequestError } from '@chato-zombilet/common'
 import { User } from '../models/user'
+
+import { signUserIn } from '../services/jwt'
 
 import { Password } from '../services/password'
 
@@ -13,56 +14,48 @@ import { UserSignedInPublisher } from '../events/publishers/user-signed-in-publi
 const router = express.Router()
 
 router.post(
-  '/api/users/signin',
-  [
-    body('email').isEmail().withMessage('E-mail must be valid.'),
-    body('password')
-      .trim()
-      .notEmpty()
-      .withMessage('Password must be supplied.'),
-  ],
-  validateRequest,
-  async (req: Request, res: Response) => {
-    const { email, password } = req.body
+    '/api/users/signin',
+    [
+        body('email').isEmail().withMessage('E-mail must be valid.'),
+        body('password')
+            .trim()
+            .notEmpty()
+            .withMessage('Password must be supplied.'),
+    ],
+    validateRequest,
+    async (req: Request, res: Response) => {
+        const { email, password } = req.body
 
-    const existingUser = await User.findOne({ email })
+        const existingUser = await User.findOne({ email })
 
-    if (!existingUser) {
-      throw new BadRequestError('Invalid Credentials!')
+        if (!existingUser) {
+            throw new BadRequestError('Invalid Credentials!')
+        }
+
+        // Password Check
+        const passwordsMatch = await Password.compare(
+            existingUser.password,
+            password
+        )
+
+        if (!passwordsMatch) {
+            throw new BadRequestError('Invalid Credentials!')
+        }
+
+        // Sign user in
+        signUserIn(req, existingUser)
+
+        // Publish an event saying that a user is signed in
+        await new UserSignedInPublisher(natsWrapper.client).publish({
+            id: existingUser.id,
+            version: existingUser.version,
+        })
+
+        // Least info within response
+        res.status(200).send({
+            email: existingUser.email,
+        })
     }
-
-    // Password Check
-    const passwordsMatch = await Password.compare(existingUser.password, password)
-
-    if (!passwordsMatch) {
-      throw new BadRequestError('Invalid Credentials!')
-    }
-
-    // Publish an event saying that a user is signed in
-    await new UserSignedInPublisher(natsWrapper.client).publish({
-      id: existingUser.id,
-      version: existingUser.version
-    })
-
-    // Generate a JWT
-    const payload = {
-      //TODO: error TS2322: Type 'String' is not assignable to type 'string'.
-      id: existingUser.id as string,  // - Defined as 'id?: any;' at Mongoose document
-      email: existingUser.email,
-    }
-    const secretKey = process.env.JWT_KEY!
-    const userJwt = jwt.sign(payload, secretKey)
-
-    // Store it on session object
-    req.session = {
-      jwt: userJwt,
-    }
-
-    // Least info within response
-    res.status(200).send({
-      email: existingUser.email
-    })
-  }
 )
 
 export { router as signInRouter }
