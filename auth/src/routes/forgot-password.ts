@@ -15,48 +15,46 @@ import { UserForgotPasswordPublisher } from '../events/publishers/user-forgot-pa
 const router = express.Router()
 
 router.post(
-  '/api/users/forgot-password',
-  [
-    body('email').isEmail().withMessage('E-mail must be valid.'),
-  ],
-  validateRequest,
-  async (req: Request, res: Response) => {
-    const { email } = req.body
+    '/api/users/forgot-password',
+    [body('email').isEmail().withMessage('E-mail must be valid.')],
+    validateRequest,
+    async (req: Request, res: Response) => {
+        const { email } = req.body
 
-    // Fetch the user
-    const existingUser = await User.findOne({ email })
+        // Fetch the user
+        const existingUser = await User.findOne({ email })
 
-    if (!existingUser) {
-      // Don't throw an error and just 'response' and 'return'
-      // // For giving least info against malicious attacks
-      return res.status(200).send()
+        if (!existingUser) {
+            // Don't throw an error and just 'response' and 'return'
+            // // For giving least info against malicious attacks
+            return res.status(200).send()
+        }
+
+        // Create a token
+        const value = randomBytes(32).toString('hex') // Enough length?
+        const expiresAt = addHoursToDate(new Date(), 1)
+        const token = Token.build({
+            userId: existingUser.id,
+            value,
+            type: TokenType.ForgotPassword,
+            expiresAt,
+        })
+        await token.save()
+
+        // Publish an event saying that a user forgot password
+        await new UserForgotPasswordPublisher(natsWrapper.client).publish({
+            id: existingUser.id,
+            version: existingUser.version,
+            token: {
+                value, // Publishing plain token 'value', instead of hashed 'value' (during pre-save)
+                type: token.type,
+                expiresAt: token.expiresAt.toISOString(),
+            },
+        })
+
+        // Least info within response
+        res.status(200).send()
     }
-
-    // Create a token
-    const value = randomBytes(32).toString('hex')  // Enough length?
-    const expiresAt = addHoursToDate(new Date(), 1)
-    const token = Token.build({
-        user: existingUser.id,
-        value,
-        type: TokenType.ForgotPassword,
-        expiresAt
-      })
-      await token.save()
-  
-    // Publish an event saying that a user forgot password
-    await new UserForgotPasswordPublisher(natsWrapper.client).publish({
-      id: existingUser.id,
-      version: existingUser.version,
-      token: {
-        value,  // Publishing plain token 'value', instead of hashed 'value' (during pre-save)
-        type: token.type,
-        expiresAt: token.expiresAt.toISOString(),
-      }
-    })
-
-    // Least info within response
-    res.status(200).send()
-  }
 )
 
 export { router as forgotPasswordRouter }

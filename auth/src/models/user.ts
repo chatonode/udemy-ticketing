@@ -14,6 +14,7 @@ interface UserAttrs {
 // An interface that describes the properties
 // that a User Document has
 export interface UserDoc extends mongoose.Document {
+    id: string
     email: string
     password: string
     version: number

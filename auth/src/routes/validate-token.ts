@@ -1,41 +1,26 @@
 import express, { Request, Response } from 'express'
-import { body } from 'express-validator'
 
-import { validateRequest, NotFoundError, TokenExpiredError, TokenType } from '@chato-zombilet/common'
-import { Token } from '../models/token'
+import { validateRequest } from '@chato-zombilet/common'
+import { tokenRequestRules, validateToken } from '../middlewares/validate-token'
+
+// import { User } from '../models/user'
 
 const router = express.Router()
 
+// Upper and more generic 'validate-token' router layer that uses 'validateToken' middleware
+// // For details of logic of token validation; check 'validateToken' middleware
 router.post(
     '/api/users/validate-token',
-    [
-        body('token').not().isEmpty().withMessage('Token must be provided.'),
-        body('type')
-            .not()
-            .isEmpty()
-            .withMessage('Token type must be provided.')
-            // @ref-link: https://stackoverflow.com/questions/63753808/how-to-check-the-type-is-enum-or-not-in-typescript
-            .custom((input: string) => (Object.values(TokenType) as string[]).includes(input))
-            .withMessage('Token type must be valid.')
-    ],
+    tokenRequestRules(),
     validateRequest,
+    validateToken,
     async (req: Request, res: Response) => {
-        const { token, type } = req.body
+        // Skipping for preventing to much DB requests
+        // Middleware is already checking token itself
+        // const userId = req.tokenizedUser!.id
+        // // Fetch the user
+        // // ...
 
-        // Hash incoming token
-        const value = Token.toHash(token)
-
-        // Fetch the token
-        const existingToken = await Token.findOne({ value, type })
-
-        if (!existingToken) {
-            throw new NotFoundError()
-        }
-
-        // Check whether token has been expired
-        if (new Date(existingToken.expiresAt) < new Date()) {
-            throw new TokenExpiredError()
-        }
 
         // Send response
         res.status(200).send()
