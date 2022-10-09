@@ -5,7 +5,7 @@ import { Listener, Subjects, OrderCreatedEvent } from '@chato-zombilet/common'
 import { queueGroupName } from './queue-group-name'
 
 // Helpers
-import { getExistingUser } from './helpers/get-existing-user'
+import { getExistingUser } from '../../services/user/get-existing-user'
 
 import { SendEmailForOrderCreated } from '../../services/email/sendgrid/sender/order-created'
 
