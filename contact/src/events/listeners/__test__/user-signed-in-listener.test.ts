@@ -83,28 +83,28 @@ it('throws an error with a non-existing user', async () => {
     expect(msg.ack).toHaveBeenCalledTimes(0)
 })
 
-it('throws an error with the old version of an existing user', async () => {
-    // Setup
-    const { listener, data, msg } = await setup()
+// it('throws an error with the old version of an existing user', async () => {
+//     // Setup
+//     const { listener, data, msg } = await setup()
 
-    // create a user before
-    const createdUser = await createUser(data.id)
+//     // create a user before
+//     const createdUser = await createUser(data.id)
     
-    // Increment the version of the user by just 'saving' it ('updateIfCurrentPlugin' feature)
-    await createdUser.save()
+//     // Increment the version of the user by just 'saving' it ('updateIfCurrentPlugin' feature)
+//     await createdUser.save()
 
-    // Assert: make sure calling the onMessage function with the data object + message object
-    // -> returns an error: User Not Found
-    try {
-        await listener.onMessage(data, msg)
-    } catch (err) {
-        expect(err).toBeDefined()
-    }
+//     // Assert: make sure calling the onMessage function with the data object + message object
+//     // -> returns an error: User Not Found
+//     try {
+//         await listener.onMessage(data, msg)
+//     } catch (err) {
+//         expect(err).toBeDefined()
+//     }
 
-    // Assert: Make sure ack function is not called
-    expect(msg.ack).not.toHaveBeenCalled()
-    expect(msg.ack).toHaveBeenCalledTimes(0)
-})
+//     // Assert: Make sure ack function is not called
+//     expect(msg.ack).not.toHaveBeenCalled()
+//     expect(msg.ack).toHaveBeenCalledTimes(0)
+// })
 
 it('sends an email', async () => {
     // Setup

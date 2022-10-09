@@ -5,7 +5,7 @@ import { Listener, Subjects, UserForgotPasswordEvent } from '@chato-zombilet/com
 import { queueGroupName } from './queue-group-name'
 
 // Helpers
-import { getExistingUserWithVersion } from '../../services/user/get-existing-user'
+import { getExistingUser } from '../../services/user/get-existing-user'
 
 import { SendEmailForUserForgotPassword } from '../../services/email/sendgrid/sender/user-forgot-password'
 
@@ -26,7 +26,7 @@ export class UserForgotPasswordListener extends Listener<UserForgotPasswordEvent
         } = eventData
 
         // Get existing user | Error
-        const existingUser = await getExistingUserWithVersion(userId, userVersion)
+        const existingUser = await getExistingUser(userId)
 
         new SendEmailForUserForgotPassword(existingUser.email, {
             userId,
