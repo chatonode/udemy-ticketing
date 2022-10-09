@@ -67,9 +67,7 @@ router.post(
             version: existingUser.version
         })
 
-        res.status(200).send({
-            email: existingUser.email
-        })
+        res.status(200).send()
     }
 )
 

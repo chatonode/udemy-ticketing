@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { query } from 'express-validator'
+import { Types } from 'mongoose'
 
 import { NotFoundError, TokenExpiredError, validateRequest } from '@chato-zombilet/common'
 
@@ -61,11 +62,11 @@ export const validateToken = async (
 
     // add:
     // - 'id' of the corresponding 'user'
-    // Skipping 'tokenId'
-    // req.body.tokenId = existingToken.id
-    const userId = existingToken.userId
+    const userId = new Types.ObjectId(existingToken.user.id).toString()    // To prevent CastError by mongoose
     req.tokenizedUser! = {
-        id: userId
+        id: userId,
+        // Skipping 'tokenId'
+        // tokenId: existingToken.id
     }
 
     next()
