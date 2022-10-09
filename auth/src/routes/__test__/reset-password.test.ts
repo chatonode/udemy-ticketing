@@ -4,7 +4,7 @@ import { app } from '../../app'
 import { randomBytes } from 'crypto'
 
 // Models
-import { User } from '../../models/user'
+import { User, UserDoc } from '../../models/user'
 import { Token, TokenType } from '../../models/token'
 
 // Helper
@@ -27,12 +27,12 @@ const createUser = async () => {
     return user
 }
 
-const createToken = async (userId: string) => {
+const createToken = async (user: UserDoc) => {
     // Create a 'forgot-password' token
     const value = randomBytes(32).toString('hex')
     const expiresAt = addHoursToDate(new Date(), 1)
     const token = Token.build({
-        userId,
+        user,
         value,
         type: TokenType.ForgotPassword,
         expiresAt
@@ -45,7 +45,7 @@ const createToken = async (userId: string) => {
 it('returns a 400 with an invalid newPassword and repeatedNewpassword', async () => {
     // Pre-conditions
     const user = await createUser()
-    const { token, plainTokenValue } = await createToken(user.id)
+    const { token, plainTokenValue } = await createToken(user)
 
     await request(app)
         .post(`/api/users/reset-password?token=${plainTokenValue}&type=${token.type}`)
@@ -59,7 +59,7 @@ it('returns a 400 with an invalid newPassword and repeatedNewpassword', async ()
 it('returns a 400 with missing newPassword or repeatedNewPassword', async () => {
     // Pre-conditions
     const user = await createUser()
-    const { token, plainTokenValue } = await createToken(user.id)
+    const { token, plainTokenValue } = await createToken(user)
 
     // Missing both 'newPassword' and 'repeatedNewPassword'
     await request(app)
@@ -89,7 +89,7 @@ it('returns a 400 with missing newPassword or repeatedNewPassword', async () => 
 it('returns a 401 with the non-existing user', async () => {
     // Pre-conditions
     const user = await createUser()
-    const { token, plainTokenValue } = await createToken(user.id)
+    const { token, plainTokenValue } = await createToken(user)
 
     // Delete the user
     await User.deleteOne({
@@ -114,7 +114,7 @@ it('returns a 401 with the non-existing user', async () => {
 it(`deletes all the existing tokens that the existing user has`, async () => {
     // Pre-conditions
     const user = await createUser()
-    const { token, plainTokenValue } = await createToken(user.id)
+    const { token, plainTokenValue } = await createToken(user)
 
     await request(app)
     .post(`/api/users/reset-password?token=${plainTokenValue}&type=${token.type}`)
@@ -134,7 +134,7 @@ it(`deletes all the existing tokens that the existing user has`, async () => {
 it(`publishes a 'user:changed-password' event`, async () => {
     // Pre-conditions
     const user = await createUser()
-    const { token, plainTokenValue } = await createToken(user.id)
+    const { token, plainTokenValue } = await createToken(user)
 
     await request(app)
         .post(`/api/users/reset-password?token=${plainTokenValue}&type=${token.type}`)
@@ -169,7 +169,7 @@ it('returns a 200 with the existing user resets password', async () => {
     })
 
     // Create a token
-    const { token, plainTokenValue } = await createToken(user!.id)
+    const { token, plainTokenValue } = await createToken(user!)
 
     // Test
     const newPassword = '11111111'

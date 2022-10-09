@@ -87,7 +87,7 @@ it(`returns a 404 with the existing token as another type`, async () => {
     const value = randomBytes(32).toString('hex')
     const expiresAt = addHoursToDate(new Date(), 1)
     const token = Token.build({
-        userId: existingUser!.id,
+        user: existingUser!,
         value,
         type: TokenType.ForgotPassword,
         expiresAt
@@ -125,7 +125,7 @@ it(`returns a 401 with the existing and expired token`, async () => {
     const value = randomBytes(32).toString('hex')
     const expiresAt = removeHoursFromDate(new Date(), 48)
     const token = Token.build({
-        userId: existingUser!.id,
+        user: existingUser!,
         value,
         type: TokenType.ForgotPassword,
         expiresAt
@@ -163,7 +163,7 @@ it(`validates and returns a 200 with the existing and non-expired token`, async 
     const value = randomBytes(32).toString('hex')
     const expiresAt = addHoursToDate(new Date(), 1)
     const token = Token.build({
-        userId: existingUser!.id,
+        user: existingUser!,
         value,
         type: TokenType.ForgotPassword,
         expiresAt

@@ -34,7 +34,7 @@ router.post(
         const value = randomBytes(32).toString('hex') // Enough length?
         const expiresAt = addHoursToDate(new Date(), 1)
         const token = Token.build({
-            userId: existingUser.id,
+            user: existingUser,
             value,
             type: TokenType.ForgotPassword,
             expiresAt,

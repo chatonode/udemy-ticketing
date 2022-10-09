@@ -11,7 +11,7 @@ export { TokenType }
 // An interface that describes the properties
 // that are required to create a new Token
 interface TokenAttrs {
-    userId: string
+    user: UserDoc
     value: string
     type: TokenType
     expiresAt: Date
@@ -20,7 +20,7 @@ interface TokenAttrs {
 // An interface that describes the properties
 // that a Token Document has
 interface TokenDoc extends mongoose.Document {
-    userId: string
+    user: UserDoc
     value: string
     type: TokenType
     expiresAt: Date
@@ -37,7 +37,7 @@ interface TokenModel extends mongoose.Model<TokenDoc> {
 }
 
 const tokenSchema = new mongoose.Schema({
-    userId: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
@@ -61,6 +61,8 @@ const tokenSchema = new mongoose.Schema({
             // _id -> id
             ret.id = ret._id
             delete ret._id
+
+            console.log('TRIGGERED')
 
             // __v -> -
             delete ret.__v   //Disabled for not using 'version'
