@@ -1,4 +1,4 @@
-import { User, UserDoc } from '../../../models/user'
+import { User, UserDoc } from '../../models/user'
 
 export const getExistingUser = async (userId: string): Promise<UserDoc> => {
     // Fetch user

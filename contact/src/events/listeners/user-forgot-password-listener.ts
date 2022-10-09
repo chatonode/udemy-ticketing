@@ -5,7 +5,7 @@ import { Listener, Subjects, UserForgotPasswordEvent } from '@chato-zombilet/com
 import { queueGroupName } from './queue-group-name'
 
 // Helpers
-import { getExistingUserWithVersion } from './helpers/get-existing-user'
+import { getExistingUserWithVersion } from '../../services/user/get-existing-user'
 
 import { SendEmailForUserForgotPassword } from '../../services/email/sendgrid/sender/user-forgot-password'
 
