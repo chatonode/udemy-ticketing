@@ -8,6 +8,7 @@ import { natsWrapper } from './nats-wrapper'
 import { UserSignedUpListener } from './events/listeners/user-signed-up-listener'
 import { UserSignedInListener } from './events/listeners/user-signed-in-listener'
 import { UserForgotPasswordListener } from './events/listeners/user-forgot-password-listener'
+import { UserChangedPasswordListener } from './events/listeners/user-changed-password-listener'
 import { TicketCreatedListener } from './events/listeners/ticket-created-listener'
 import { TicketUpdatedListener } from './events/listeners/ticket-updated-listener'
 import { OrderCreatedListener } from './events/listeners/order-created-listener'
@@ -70,6 +71,7 @@ const start = async () => {
         new UserSignedUpListener(natsWrapper.client).listen()
         new UserSignedInListener(natsWrapper.client).listen()
         new UserForgotPasswordListener(natsWrapper.client).listen()
+        new UserChangedPasswordListener(natsWrapper.client).listen()
         new TicketCreatedListener(natsWrapper.client).listen()
         new TicketUpdatedListener(natsWrapper.client).listen()
         new OrderCreatedListener(natsWrapper.client).listen()
